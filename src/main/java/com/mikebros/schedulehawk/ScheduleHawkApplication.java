@@ -18,7 +18,7 @@ public class ScheduleHawkApplication extends Application {
 
     public void start(Stage stage) throws IOException {
         myStage = stage;
-        Parent root = (Parent) FXMLLoader.load((URL) Objects.requireNonNull(HelloApplication.class.getResource("login1.0.fxml")));
+        Parent root = (Parent) FXMLLoader.load(Objects.requireNonNull(ScheduleHawkApplication.class.getResource("login1.0.fxml")));
         Scene scene = new Scene(root);
         stage.setTitle("Schedule Hawk");
         stage.setScene(scene);
@@ -26,7 +26,7 @@ public class ScheduleHawkApplication extends Application {
     }
 
     public void changeScene(String newScene) throws IOException {
-        Parent newRoot = (Parent) FXMLLoader.load((URL) Objects.requireNonNull(HelloApplication.class.getResource(newScene)));
+        Parent newRoot = (Parent) FXMLLoader.load(Objects.requireNonNull(ScheduleHawkApplication.class.getResource(newScene)));
         myStage.getScene().setRoot(newRoot);
     }
 
