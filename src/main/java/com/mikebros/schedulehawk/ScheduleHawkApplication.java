@@ -7,14 +7,11 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-import java.net.URL;
 import java.sql.ResultSet;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class ScheduleHawkApplication extends Application {
-    private static Stage myStage;
 
     public ScheduleHawkApplication() {
     }
@@ -30,23 +27,29 @@ public class ScheduleHawkApplication extends Application {
             System.out.println("Password: " + results.getString("Password"));
         }
 
-        Parent root = (Parent) FXMLLoader.load(Objects.requireNonNull(ScheduleHawkApplication.class.getResource("login-view.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(ScheduleHawkApplication.class.getResource("login-view.fxml")));
         Scene scene = new Scene(root);
         stage.setTitle("Schedule Hawk");
         stage.setScene(scene);
         stage.show();
-
-        myStage = (Stage) stage.getScene().getWindow();
-
-        System.out.println();
     }
 
-    public static void changeScene(ActionEvent event, String newSceneName) throws IOException {
-        Parent newRoot = (Parent) FXMLLoader.load(Objects.requireNonNull(ScheduleHawkApplication.class.getResource(newSceneName + ".fxml")));
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(newRoot);
-        stage.setScene(scene);
-        stage.show();
+    public static void changeScene(ActionEvent event, String newSceneName) {
+        try {
+            Parent newRoot = FXMLLoader.load(Objects.requireNonNull(ScheduleHawkApplication.class.getResource(newSceneName + ".fxml")));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(newRoot);
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            System.out.println("......................................................................................");
+            System.out.println("Error occurred while trying to change scene");
+            System.out.println("Error: " + e);
+            System.out.println("Message: " + e.getMessage());
+            System.out.println("Class: " + e.getClass());
+            System.out.println("\n Stack Trace: " + Arrays.toString(e.getStackTrace()));
+            System.out.println("......................................................................................");
+        }
     }
 
     public static void main(String[] args) {
