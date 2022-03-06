@@ -2,12 +2,12 @@ package com.mikebros.schedulehawk.controller;
 
 import com.mikebros.schedulehawk.DBConnection;
 import com.mikebros.schedulehawk.ScheduleHawkApplication;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-
 import java.sql.ResultSet;
 
 public class LoginController {
@@ -29,14 +29,14 @@ public class LoginController {
     }
 
     @FXML
-    protected void onLoginButtonClick() throws Exception {
+    protected void onLoginButtonClick(ActionEvent event) throws Exception {
         System.out.println("onLoginButtonClick, attempting to login with credentials...");
         System.out.println("Username: " + usernameInput.getText());
         System.out.println("Password: " + passwordInput.getText());
 
         if (validateLogin(usernameInput.getText(), passwordInput.getText())) {
             System.out.println("Login attempt successful");
-            ScheduleHawkApplication.changeScene("dashboard-view");
+            ScheduleHawkApplication.changeScene(event,"dashboard-view");
         } else {
             System.out.println("Login attempt failed");
             warningLabel.setText("Login failed, Please try again");
