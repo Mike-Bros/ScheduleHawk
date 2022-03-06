@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Properties;
 
 public class ScheduleHawkApplication extends Application {
 

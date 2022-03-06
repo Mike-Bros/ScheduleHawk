@@ -8,14 +8,14 @@
 <?import javafx.scene.text.Font?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mikebros.schedulehawk.controller.LoginController">
-   <Label fx:id="loginTitle" alignment="CENTER" layoutY="120.0" prefHeight="53.0" prefWidth="600.0" text="User Login">
+   <Label fx:id="loginTitle" alignment="CENTER" layoutY="120.0" prefHeight="53.0" prefWidth="600.0">
       <font>
          <Font size="36.0" />
       </font>
    </Label>
-   <TextField fx:id="usernameInput" layoutX="226.0" layoutY="188.0" promptText="Username" />
-   <PasswordField fx:id="passwordInput" layoutX="226.0" layoutY="222.0" promptText="Password" />
-   <Button fx:id="loginButton" layoutX="226.0" layoutY="253.0" mnemonicParsing="false" onAction="#onLoginButtonClick" prefHeight="25.0" prefWidth="149.0" text="Login" />
+   <TextField fx:id="usernameInput" layoutX="226.0" layoutY="188.0" />
+   <PasswordField fx:id="passwordInput" layoutX="226.0" layoutY="222.0" />
+   <Button fx:id="loginButton" layoutX="226.0" layoutY="253.0" mnemonicParsing="false" onAction="#onLoginButtonClick" prefHeight="25.0" prefWidth="149.0" />
    <Label fx:id="warningLabel" alignment="CENTER" layoutY="300.0" minWidth="-Infinity" prefHeight="18.0" prefWidth="600.0" textAlignment="CENTER" />
-   <Label fx:id="LanguageLabel" alignment="CENTER" layoutY="10.0" minWidth="-Infinity" prefHeight="18.0" prefWidth="600.0" textAlignment="CENTER" />
+   <Label fx:id="languageLabel" alignment="CENTER" layoutY="10.0" minWidth="-Infinity" prefHeight="18.0" prefWidth="600.0" textAlignment="CENTER" />
 </Pane>
