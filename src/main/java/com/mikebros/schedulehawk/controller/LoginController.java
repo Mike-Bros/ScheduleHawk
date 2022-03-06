@@ -10,6 +10,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import java.io.InputStream;
 import java.sql.ResultSet;
+import java.time.ZoneId;
 import java.util.Properties;
 
 public class LoginController {
@@ -27,6 +28,8 @@ public class LoginController {
     private Button loginButton;
     @FXML
     private Label warningLabel;
+    @FXML
+    private Label zoneLabel;
 
     public void initialize() throws Exception {
         System.out.println("......................................................................................");
@@ -83,5 +86,6 @@ public class LoginController {
         loginTitle.setText(props.getProperty(userLang + "loginTitle"));
         languageLabel.setText(props.getProperty(userLang + "languageLabel"));
         loginButton.setText(props.getProperty(userLang + "loginButton"));
+        zoneLabel.setText("Zone: " + String.valueOf(ZoneId.systemDefault()));
     }
 }
