@@ -24,8 +24,15 @@ public class LoginController {
     @FXML
     private Label warningLabel;
 
-    public LoginController() {
-        System.out.println("LoginController");
+    public void initialize() {
+        System.out.println("......................................................................................");
+        System.out.println("Initializing LoginController");
+
+        // Set all labels to system language
+
+
+        System.out.println("Finished initializing LoginController");
+        System.out.println("......................................................................................");
     }
 
     @FXML
