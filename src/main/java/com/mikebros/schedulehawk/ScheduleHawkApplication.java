@@ -9,8 +9,14 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.util.Objects;
 
+/**
+ * Schedule Hawk application main class.
+ */
 public class ScheduleHawkApplication extends Application {
 
+    /**
+     * Instantiates a new Schedule Hawk application.
+     */
     public ScheduleHawkApplication() {
     }
 
@@ -22,6 +28,12 @@ public class ScheduleHawkApplication extends Application {
         stage.show();
     }
 
+    /**
+     * Change the scene to a specified new one.
+     *
+     * @param event        the FX action event that calls this method
+     * @param newSceneName the name of the fxml file this method will change to without the .fxml added
+     */
     public static void changeScene(ActionEvent event, String newSceneName) {
         try {
             Parent newRoot = FXMLLoader.load(Objects.requireNonNull(ScheduleHawkApplication.class.getResource("/com/mikebros/schedulehawk/views/" + newSceneName + ".fxml")));

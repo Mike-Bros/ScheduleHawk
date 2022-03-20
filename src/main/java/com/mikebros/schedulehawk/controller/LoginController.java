@@ -13,7 +13,11 @@ import java.sql.ResultSet;
 import java.time.ZoneId;
 import java.util.Properties;
 
+/**
+ * The login page controller.
+ */
 public class LoginController {
+
     Properties props;
     String userLang;
     @FXML
@@ -31,6 +35,11 @@ public class LoginController {
     @FXML
     private Label zoneLabel;
 
+    /**
+     * Initialize the login-view.fxml.
+     *
+     * @throws Exception the exception
+     */
     public void initialize() throws Exception {
         System.out.println("......................................................................................");
         System.out.println("Initializing LoginController");
@@ -45,6 +54,12 @@ public class LoginController {
         System.out.println("......................................................................................\n");
     }
 
+    /**
+     * On login button click validates login and changes scene to dashboard-view.fxml.
+     *
+     * @param event the ActionEvent event to be passed to changeScene
+     * @throws Exception the exception
+     */
     @FXML
     protected void onLoginButtonClick(ActionEvent event) throws Exception {
         System.out.println("onLoginButtonClick, attempting to login with credentials...");
@@ -60,6 +75,14 @@ public class LoginController {
         }
     }
 
+    /**
+     * Validate the user login.
+     *
+     * @param user     the username
+     * @param password the password
+     * @return if the user login was valid as a Boolean
+     * @throws Exception the exception
+     */
     private static Boolean validateLogin(String user, String password) throws Exception {
         String query = "SELECT * FROM users WHERE ";
         query += "User_Name='" + user + "' AND ";
@@ -69,6 +92,11 @@ public class LoginController {
         return rs.next();
     }
 
+    /**
+     * Loads properties file into local props variable.
+     *
+     * @throws Exception the exception
+     */
     private void getProperties() throws Exception {
         props = new Properties();
         InputStream is = ScheduleHawkApplication.class.getResourceAsStream("/com/mikebros/schedulehawk/language/login.properties");
@@ -82,6 +110,9 @@ public class LoginController {
         }
     }
 
+    /**
+     * Sets the text of all elements to user language appropriate version.
+     */
     private void setDefaultText(){
         loginTitle.setText(props.getProperty(userLang + "loginTitle"));
         languageLabel.setText(props.getProperty(userLang + "languageLabel"));

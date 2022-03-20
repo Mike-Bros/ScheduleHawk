@@ -11,6 +11,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * The type Dashboard controller.
+ */
 public class DashboardController {
     @FXML
     private TableView<Appointment> appointmentTable;
@@ -43,6 +46,11 @@ public class DashboardController {
     @FXML
     private TableColumn<Appointment, String> createDate;
 
+    /**
+     * Initialize the dashboard-view.fxml.
+     *
+     * @throws Exception the exception
+     */
     public void initialize() throws Exception {
         System.out.println("......................................................................................");
         System.out.println("Initializing Dashboard");
@@ -54,11 +62,24 @@ public class DashboardController {
     }
 
 
+    /**
+     * Gets all appointments from the DB.
+     *
+     * @return result set of all appointments
+     * @throws Exception the exception
+     */
     private ResultSet getAllAppointments() throws Exception {
         String query = "SELECT * FROM appointments;";
         return DBConnection.query(query);
     }
 
+    /**
+     * Create observable list of Appointment objects with a given ResultSet.
+     *
+     * @param appointments ResultSet of appointments
+     * @return the observable list of Appointment object(s)
+     * @throws SQLException the sql exception
+     */
     private ObservableList<Appointment> createAppointments(ResultSet appointments) throws SQLException {
         ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
 
@@ -84,6 +105,11 @@ public class DashboardController {
         return appointmentList;
     }
 
+    /**
+     * Add appointment rows to dashboard.
+     *
+     * @param appointmentList the observable list of Appointment object(s)
+     */
     private void addRows(ObservableList<Appointment> appointmentList){
         start.setCellValueFactory(new PropertyValueFactory<>("start"));
         end.setCellValueFactory(new PropertyValueFactory<>("end"));
