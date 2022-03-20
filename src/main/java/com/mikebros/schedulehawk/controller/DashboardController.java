@@ -2,16 +2,13 @@ package com.mikebros.schedulehawk.controller;
 
 import com.mikebros.schedulehawk.DBConnection;
 import com.mikebros.schedulehawk.models.Appointment;
-import com.mikebros.schedulehawk.models.Appointment;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 public class DashboardController {

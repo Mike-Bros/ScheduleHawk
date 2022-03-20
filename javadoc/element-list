@@ -1,0 +1,4 @@
+module:com.mikebros.schedulehawk
+com.mikebros.schedulehawk
+com.mikebros.schedulehawk.controller
+com.mikebros.schedulehawk.models
