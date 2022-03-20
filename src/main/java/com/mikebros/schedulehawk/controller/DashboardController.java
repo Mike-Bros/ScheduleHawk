@@ -50,38 +50,19 @@ public class DashboardController {
         System.out.println("......................................................................................");
         System.out.println("Initializing Dashboard");
 
-//        ResultSet appointments = getAppointments();
-//        printAllAppointments(appointments);
-
-        ResultSet appointments = getAppointments();
-        ObservableList<Appointment> appointmentList = getAppointmentObjects(appointments);
-        addRows(appointmentList);
-
+        addRows(createAppointments(getAllAppointments()));
 
         System.out.println("Finished initializing Dashboard");
         System.out.println("......................................................................................\n");
     }
 
 
-    private ResultSet getAppointments() throws Exception {
+    private ResultSet getAllAppointments() throws Exception {
         String query = "SELECT * FROM appointments;";
         return DBConnection.query(query);
     }
 
-    private void printAllAppointments(ResultSet appointments) throws SQLException {
-        ResultSetMetaData apptMetaData = appointments.getMetaData();
-        int columnsNumber = apptMetaData.getColumnCount();
-        while (appointments.next()){
-            for (int i = 1; i <= columnsNumber; i++) {
-                if (i > 1) System.out.print("\n ");
-                String columnValue = appointments.getString(i);
-                System.out.print(apptMetaData.getColumnName(i) + ": " + columnValue);
-            }
-            System.out.println("\n");
-        }
-    }
-
-    private ObservableList<Appointment> getAppointmentObjects(ResultSet appointments) throws SQLException {
+    private ObservableList<Appointment> createAppointments(ResultSet appointments) throws SQLException {
         ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
 
         while (appointments.next()){
