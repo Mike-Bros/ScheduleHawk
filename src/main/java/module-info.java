@@ -14,5 +14,6 @@ module com.mikebros.schedulehawk {
     opens com.mikebros.schedulehawk to javafx.fxml;
     exports com.mikebros.schedulehawk;
     exports com.mikebros.schedulehawk.controller;
+    exports com.mikebros.schedulehawk.models;
     opens com.mikebros.schedulehawk.controller to javafx.fxml;
 }

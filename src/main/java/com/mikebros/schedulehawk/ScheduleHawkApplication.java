@@ -37,7 +37,8 @@ public class ScheduleHawkApplication extends Application {
             System.out.println("Error: " + e);
             System.out.println("Message: " + e.getMessage());
             System.out.println("Class: " + e.getClass());
-            System.out.println("\n Stack Trace: " + Arrays.toString(e.getStackTrace()));
+            System.out.println("\n Stack Trace: ");
+            e.printStackTrace();
             System.out.println("......................................................................................");
         }
     }
