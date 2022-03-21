@@ -4,7 +4,10 @@ import com.mikebros.schedulehawk.DBConnection;
 import com.mikebros.schedulehawk.models.Appointment;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -85,6 +88,11 @@ public class DashboardController {
 
         while (appointments.next()){
             Appointment appt = new Appointment();
+            Button editButton = new Button();
+            editButton.setText("edit");
+            //editButton.setId(appointments.getString("Appointment_ID"));
+            editButton.setUserData(appointments.getString("Appointment_ID"));
+            editButton.setOnAction(this::editButtonClicked);
 
             appt.set_id(appointments.getString("Appointment_ID"));
             appt.set_title(appointments.getString("Title"));
@@ -100,6 +108,7 @@ public class DashboardController {
             appt.set_customerID(appointments.getString("Customer_ID"));
             appt.set_userID(appointments.getString("User_ID"));
             appt.set_contactID(appointments.getString("Contact_ID"));
+            appt.set_editButton(editButton);
             appointmentList.add(appt);
         }
         return appointmentList;
@@ -124,6 +133,21 @@ public class DashboardController {
         createdBy.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
         lastUpdate.setCellValueFactory(new PropertyValueFactory<>("lastUpdate"));
         lastUpdatedBy.setCellValueFactory(new PropertyValueFactory<>("lastUpdatedBy"));
+        edit.setCellValueFactory(new PropertyValueFactory<>("editButton"));
         appointmentTable.setItems(appointmentList);
+    }
+
+    @FXML
+    private void editButtonClicked(ActionEvent event) {
+        Node node = (Node) event.getSource();
+        System.out.println("Clicked on the button for appointment: " + node.getUserData());
+        System.out.println(event);
+        //Change scene to the edit-view where Appointment_ID = buttonId
+    }
+
+    @FXML
+    private void createNewAppointmentButtonClicked(ActionEvent event){
+        System.out.println("Clicked on the button to create a new appointment...");
+        System.out.println(event);
     }
 }

@@ -9,23 +9,24 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mikebros.schedulehawk.controller.DashboardController">
    <children>
-      <TableView fx:id="appointmentTable" layoutX="50.0" layoutY="129.0" prefHeight="930.0" prefWidth="1820.0">
+      <TableView fx:id="appointmentTable" layoutX="50.0" layoutY="175.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="861.0" prefWidth="1820.0">
          <columns>
-            <TableColumn fx:id="start" prefWidth="120.0" text="Start" />
-            <TableColumn fx:id="end" prefWidth="120.0" text="End" />
-            <TableColumn fx:id="title" prefWidth="150.0" text="Title" />
-            <TableColumn fx:id="description" prefWidth="150.0" text="Description" />
-            <TableColumn fx:id="type" prefWidth="120.0" text="Type" />
-            <TableColumn fx:id="location_col" prefWidth="120.0" text="Location" />
-            <TableColumn fx:id="customerID" prefWidth="120.0" text="Customer_ID" />
-            <TableColumn fx:id="contactID" prefWidth="120.0" text="Contact_ID" />
-            <TableColumn fx:id="userID" prefWidth="120.0" text="User_ID" />
-            <TableColumn fx:id="createDate" prefWidth="120.0" text="Create_Date" />
-            <TableColumn fx:id="createdBy" prefWidth="120.0" text="Created_By" />
-            <TableColumn fx:id="lastUpdate" prefWidth="120.0" text="Last_Update" />
-            <TableColumn fx:id="lastUpdatedBy" prefWidth="120.0" text="Last_Updated_By" />
-            <TableColumn fx:id="edit" prefWidth="200.0" text="Edit" />
+            <TableColumn fx:id="start" text="Start" />
+            <TableColumn fx:id="end" text="End" />
+            <TableColumn fx:id="title" text="Title" />
+            <TableColumn fx:id="description" text="Description" />
+            <TableColumn fx:id="type" text="Type" />
+            <TableColumn fx:id="location_col" text="Location" />
+            <TableColumn fx:id="customerID" text="Customer_ID" />
+            <TableColumn fx:id="contactID" text="Contact_ID" />
+            <TableColumn fx:id="userID" text="User_ID" />
+            <TableColumn fx:id="createDate" text="Create_Date" />
+            <TableColumn fx:id="createdBy" text="Created_By" />
+            <TableColumn fx:id="lastUpdate" text="Last_Update" />
+            <TableColumn fx:id="lastUpdatedBy" text="Last_Updated_By" />
+            <TableColumn fx:id="edit" text="Edit" />
          </columns>
       </TableView>
+      <Button layoutX="50.0" layoutY="138.0" mnemonicParsing="false" onAction="#createNewAppointmentButtonClicked" text="Create New Appointment" />
    </children>
 </Pane>

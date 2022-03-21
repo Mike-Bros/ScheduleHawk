@@ -1,6 +1,11 @@
 package com.mikebros.schedulehawk.models;
 
 
+import javafx.scene.control.Button;
+
+/**
+ * The type Appointment.
+ */
 public class Appointment {
     private String id;
     private String title;
@@ -16,12 +21,13 @@ public class Appointment {
     private String customerID;
     private String userID;
     private String contactID;
+    private Button editButton;
 
     /**
      * Instantiates a new Appointment.
      */
     public Appointment(){
-        
+
     }
 
     /**
@@ -150,6 +156,16 @@ public class Appointment {
         this.contactID = contactID;
     }
 
+
+    /**
+     * Set edit button.
+     *
+     * @param button the button
+     */
+    public void set_editButton(Button button){
+        this.editButton = button;
+    }
+
     /**
      * Get id string.
      *
@@ -276,5 +292,14 @@ public class Appointment {
         return this.contactID;
     }
 
+
+    /**
+     * Get edit button string.
+     *
+     * @return the string
+     */
+    public Button getEditButton(){
+        return this.editButton;
+    }
 
 }
