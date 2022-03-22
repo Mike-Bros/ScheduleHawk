@@ -1,6 +1,7 @@
 package com.mikebros.schedulehawk.controller;
 
 import com.mikebros.schedulehawk.DBConnection;
+import com.mikebros.schedulehawk.ScheduleHawkApplication;
 import com.mikebros.schedulehawk.models.Appointment;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,7 +18,7 @@ import java.sql.SQLException;
 /**
  * The type Dashboard controller.
  */
-public class DashboardController {
+public class DashboardController{
     @FXML
     private TableView<Appointment> appointmentTable;
     @FXML
@@ -48,6 +49,10 @@ public class DashboardController {
     private TableColumn<Appointment, String> end;
     @FXML
     private TableColumn<Appointment, String> createDate;
+    @FXML
+    private Button createAppointment;
+    @FXML
+    private Button logout;
 
     /**
      * Initialize the dashboard-view.fxml.
@@ -57,13 +62,11 @@ public class DashboardController {
     public void initialize() throws Exception {
         System.out.println("......................................................................................");
         System.out.println("Initializing Dashboard");
-
         addRows(createAppointments(getAllAppointments()));
-
+        createAppointment.setUserData("new");
         System.out.println("Finished initializing Dashboard");
         System.out.println("......................................................................................\n");
     }
-
 
     /**
      * Gets all appointments from the DB.
@@ -143,11 +146,18 @@ public class DashboardController {
         System.out.println("Clicked on the button for appointment: " + node.getUserData());
         System.out.println(event);
         //Change scene to the edit-view where Appointment_ID = buttonId
+        ScheduleHawkApplication.changeScene(event,"edit-view");
+
     }
 
     @FXML
     private void createNewAppointmentButtonClicked(ActionEvent event){
         System.out.println("Clicked on the button to create a new appointment...");
-        System.out.println(event);
+        ScheduleHawkApplication.changeScene(event,"edit-view");
+    }
+
+    public void logoutButtonClicked(ActionEvent event) {
+        System.out.println("Clicked on the logout button, returning to login view...");
+        ScheduleHawkApplication.changeScene(event,"login-view");
     }
 }

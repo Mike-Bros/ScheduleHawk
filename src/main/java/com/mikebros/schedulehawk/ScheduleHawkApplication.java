@@ -13,6 +13,7 @@ import java.util.Objects;
  * Schedule Hawk application main class.
  */
 public class ScheduleHawkApplication extends Application {
+    public static ActionEvent lastSceneChangeEvent;
 
     /**
      * Instantiates a new Schedule Hawk application.
@@ -36,7 +37,9 @@ public class ScheduleHawkApplication extends Application {
      */
     public static void changeScene(ActionEvent event, String newSceneName) {
         try {
-            Parent newRoot = FXMLLoader.load(Objects.requireNonNull(ScheduleHawkApplication.class.getResource("/com/mikebros/schedulehawk/views/" + newSceneName + ".fxml")));
+            lastSceneChangeEvent = event;
+            FXMLLoader loader = new FXMLLoader(ScheduleHawkApplication.class.getResource("/com/mikebros/schedulehawk/views/" + newSceneName + ".fxml"));
+            Parent newRoot = loader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(newRoot);
             stage.setScene(scene);

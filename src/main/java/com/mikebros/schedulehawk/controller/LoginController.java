@@ -16,7 +16,7 @@ import java.util.Properties;
 /**
  * The login page controller.
  */
-public class LoginController {
+public class LoginController{
 
     Properties props;
     String userLang;
@@ -89,6 +89,7 @@ public class LoginController {
         query += "Password='" + password + "';";
 
         ResultSet rs = DBConnection.query(query);
+
         return rs.next();
     }
 

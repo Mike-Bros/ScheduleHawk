@@ -7,9 +7,9 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mikebros.schedulehawk.controller.DashboardController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1720.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mikebros.schedulehawk.controller.DashboardController">
    <children>
-      <TableView fx:id="appointmentTable" layoutX="50.0" layoutY="175.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="861.0" prefWidth="1820.0">
+      <TableView fx:id="appointmentTable" layoutX="50.0" layoutY="175.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="870.0" prefWidth="1620.0">
          <columns>
             <TableColumn fx:id="start" text="Start" />
             <TableColumn fx:id="end" text="End" />
@@ -27,6 +27,7 @@
             <TableColumn fx:id="edit" text="Edit" />
          </columns>
       </TableView>
-      <Button layoutX="50.0" layoutY="138.0" mnemonicParsing="false" onAction="#createNewAppointmentButtonClicked" text="Create New Appointment" />
+      <Button fx:id="createAppointment" layoutX="50.0" layoutY="130.0" mnemonicParsing="false" onAction="#createNewAppointmentButtonClicked" text="Create New Appointment" />
+      <Button fx:id="logout" layoutX="50.0" layoutY="40.0" mnemonicParsing="false" onAction="#logoutButtonClicked" text="Logout" />
    </children>
 </Pane>
