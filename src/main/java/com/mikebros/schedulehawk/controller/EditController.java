@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 
 import java.sql.ResultSet;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class EditController {
@@ -222,11 +223,11 @@ public class EditController {
         appt.set_description(description.getText());
         appt.set_location(location_field.getText());
         appt.set_type(type.getText());
-        // appt.set_start();
-        // appt.set_end();
-        //appt.set_createDate();
+        appt.set_start(getDateTimeString(start_date, start_hour, start_min));
+        appt.set_end(getDateTimeString(end_date, end_hour, end_min));
+        appt.set_createDate(getDateTimeString(create_date_date, create_date_hour, create_date_min));
         appt.set_createdBy(created_by.getText());
-        // appt.set_lastUpdate();
+        appt.set_lastUpdate(getDateTimeString(last_update_date, last_update_hour, last_update_min));
         appt.set_lastUpdatedBy(last_updated_by.getText());
         appt.set_customerID(customer_id.getText());
         appt.set_userID(user_id.getText());
@@ -237,8 +238,6 @@ public class EditController {
 
     private LocalDate getLocalDate(String dateTime) {
         String[] arrStr = dateTime.split(" ");
-        for (String a : arrStr)
-            System.out.println(a);
         return LocalDate.parse(arrStr[0]);
     }
 
@@ -252,6 +251,12 @@ public class EditController {
         String[] arrStr = dateTime.split(" ");
         arrStr = arrStr[1].split(":");
         return arrStr[1];
+    }
+
+    private String getDateTimeString(DatePicker datePicker, ComboBox<String> start_hour, ComboBox<String> start_min) {
+        String date = datePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String time = start_hour.getValue() + ":" + start_min.getValue() + ":00";
+        return date + " " + time;
     }
 
 }
