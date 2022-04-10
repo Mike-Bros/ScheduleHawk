@@ -334,7 +334,7 @@ public class EditController {
         ZonedDateTime zonedDateTime = ZonedDateTime.of(localDate, localTime, ZoneId.of("UTC"));
 
         dt = zonedDateTime.withZoneSameInstant(ZoneId.systemDefault()).toString();
-        dt = dt.replace("-05:00[America/Chicago]", "");
+        dt = dt.substring(0,16); // removes zone info
         dt = dt.replace("T", " ");
         return dt;
     }
