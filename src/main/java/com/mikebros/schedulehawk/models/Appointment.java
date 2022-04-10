@@ -26,8 +26,7 @@ public class Appointment {
     /**
      * Instantiates a new Appointment.
      */
-    public Appointment(){
-
+    public Appointment() {
     }
 
     /**
@@ -35,7 +34,7 @@ public class Appointment {
      *
      * @param id the id
      */
-    public void set_id(String id){
+    public void set_id(String id) {
         this.id = id;
     }
 
@@ -44,7 +43,7 @@ public class Appointment {
      *
      * @param title the title
      */
-    public void set_title(String title){
+    public void set_title(String title) {
         this.title = title;
     }
 
@@ -53,7 +52,7 @@ public class Appointment {
      *
      * @param description the description
      */
-    public void set_description(String description){
+    public void set_description(String description) {
         this.description = description;
     }
 
@@ -62,7 +61,7 @@ public class Appointment {
      *
      * @param location the location
      */
-    public void set_location(String location){
+    public void set_location(String location) {
         this.location = location;
     }
 
@@ -71,7 +70,7 @@ public class Appointment {
      *
      * @param type the type
      */
-    public void set_type(String type){
+    public void set_type(String type) {
         this.type = type;
     }
 
@@ -80,7 +79,7 @@ public class Appointment {
      *
      * @param start the start
      */
-    public void set_start(String start){
+    public void set_start(String start) {
         this.start = start;
     }
 
@@ -89,7 +88,7 @@ public class Appointment {
      *
      * @param end the end
      */
-    public void set_end(String end){
+    public void set_end(String end) {
         this.end = end;
     }
 
@@ -98,7 +97,7 @@ public class Appointment {
      *
      * @param createDate the create date
      */
-    public void set_createDate(String createDate){
+    public void set_createDate(String createDate) {
         this.createDate = createDate;
     }
 
@@ -107,7 +106,7 @@ public class Appointment {
      *
      * @param createdBy the created by
      */
-    public void set_createdBy(String createdBy){
+    public void set_createdBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -116,7 +115,7 @@ public class Appointment {
      *
      * @param lastUpdate the last update
      */
-    public void set_lastUpdate(String lastUpdate){
+    public void set_lastUpdate(String lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
 
@@ -125,7 +124,7 @@ public class Appointment {
      *
      * @param lastUpdatedBy the last updated by
      */
-    public void set_lastUpdatedBy(String lastUpdatedBy){
+    public void set_lastUpdatedBy(String lastUpdatedBy) {
         this.lastUpdatedBy = lastUpdatedBy;
     }
 
@@ -134,7 +133,7 @@ public class Appointment {
      *
      * @param customerID the customer id
      */
-    public void set_customerID(String customerID){
+    public void set_customerID(String customerID) {
         this.customerID = customerID;
     }
 
@@ -143,7 +142,7 @@ public class Appointment {
      *
      * @param userID the user id
      */
-    public void set_userID(String userID){
+    public void set_userID(String userID) {
         this.userID = userID;
     }
 
@@ -152,7 +151,7 @@ public class Appointment {
      *
      * @param contactID the contact id
      */
-    public void set_contactID(String contactID){
+    public void set_contactID(String contactID) {
         this.contactID = contactID;
     }
 
@@ -162,7 +161,7 @@ public class Appointment {
      *
      * @param button the button
      */
-    public void set_editButton(Button button){
+    public void set_editButton(Button button) {
         this.editButton = button;
     }
 
@@ -171,7 +170,7 @@ public class Appointment {
      *
      * @return the string
      */
-    public String getId(){
+    public String getId() {
         return this.id;
     }
 
@@ -180,7 +179,7 @@ public class Appointment {
      *
      * @return the string
      */
-    public String getTitle(){
+    public String getTitle() {
         return this.title;
     }
 
@@ -189,7 +188,7 @@ public class Appointment {
      *
      * @return the string
      */
-    public String getDescription(){
+    public String getDescription() {
         return this.description;
     }
 
@@ -198,7 +197,7 @@ public class Appointment {
      *
      * @return the string
      */
-    public String getLocation(){
+    public String getLocation() {
         return this.location;
     }
 
@@ -207,7 +206,7 @@ public class Appointment {
      *
      * @return the string
      */
-    public String getType(){
+    public String getType() {
         return this.type;
     }
 
@@ -216,7 +215,7 @@ public class Appointment {
      *
      * @return the string
      */
-    public String getStart(){
+    public String getStart() {
         return this.start;
     }
 
@@ -225,7 +224,7 @@ public class Appointment {
      *
      * @return the string
      */
-    public String getEnd(){
+    public String getEnd() {
         return this.end;
     }
 
@@ -234,7 +233,7 @@ public class Appointment {
      *
      * @return the string
      */
-    public String getCreateDate(){
+    public String getCreateDate() {
         return this.createDate;
     }
 
@@ -243,7 +242,7 @@ public class Appointment {
      *
      * @return the string
      */
-    public String getCreatedBy(){
+    public String getCreatedBy() {
         return this.createdBy;
     }
 
@@ -252,7 +251,7 @@ public class Appointment {
      *
      * @return the string
      */
-    public String getLastUpdate(){
+    public String getLastUpdate() {
         return this.lastUpdate;
     }
 
@@ -261,7 +260,7 @@ public class Appointment {
      *
      * @return the string
      */
-    public String getLastUpdatedBy(){
+    public String getLastUpdatedBy() {
         return this.lastUpdatedBy;
     }
 
@@ -270,7 +269,7 @@ public class Appointment {
      *
      * @return the string
      */
-    public String getCustomerId(){
+    public String getCustomerId() {
         return this.customerID;
     }
 
@@ -279,7 +278,7 @@ public class Appointment {
      *
      * @return the string
      */
-    public String getUserId(){
+    public String getUserId() {
         return this.userID;
     }
 
@@ -288,7 +287,7 @@ public class Appointment {
      *
      * @return the string
      */
-    public String getContactId(){
+    public String getContactId() {
         return this.contactID;
     }
 
@@ -298,7 +297,7 @@ public class Appointment {
      *
      * @return the string
      */
-    public Button getEditButton(){
+    public Button getEditButton() {
         return this.editButton;
     }
 

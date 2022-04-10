@@ -3,6 +3,7 @@ package com.mikebros.schedulehawk.controller;
 import com.mikebros.schedulehawk.DBConnection;
 import com.mikebros.schedulehawk.ScheduleHawkApplication;
 import com.mikebros.schedulehawk.models.Appointment;
+import com.mikebros.schedulehawk.models.Contact;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -30,7 +31,7 @@ public class EditController {
     @FXML
     private TextField type;
     @FXML
-    private ComboBox<?> contact_name;
+    private ComboBox<String> contact_name;
     @FXML
     private TextField user_id;
     @FXML
@@ -94,7 +95,7 @@ public class EditController {
     }
 
     @FXML
-    private void submitButtonClicked() {
+    private void submitButtonClicked() throws Exception {
         err_message_label.setText("");
         if (Objects.equals(title.getText(), "")) {
             System.out.println("Title cannot be null");
@@ -131,7 +132,7 @@ public class EditController {
         ScheduleHawkApplication.changeScene(event, "dashboard-view");
     }
 
-    private void setComboBoxes() {
+    private void setComboBoxes() throws Exception {
         ObservableList<String> hours = FXCollections.observableArrayList();
         for (int i = 1; i <= 24; i++) {
             if (i < 10) {
@@ -157,6 +158,8 @@ public class EditController {
         end_min.setItems(minutes);
         create_date_min.setItems(minutes);
         last_update_min.setItems(minutes);
+
+        contact_name.setItems(getContactNamesFromDB());
     }
 
     private void setPrefilledFields(String appointmentId) throws Exception {
@@ -167,7 +170,6 @@ public class EditController {
         description.setText(appointment.getDescription());
         location_field.setText(appointment.getLocation());
         type.setText(appointment.getType());
-        // need to add functionality to populate contact names and put a placeholder here based on contact_id
         user_id.setText(appointment.getUserId());
         customer_id.setText(appointment.getCustomerId());
 
@@ -216,7 +218,28 @@ public class EditController {
         return appt;
     }
 
-    private Appointment createAppointment() {
+    private ObservableList<String> getContactNamesFromDB() throws Exception {
+        String query = "SELECT * FROM contacts";
+        ResultSet contacts = DBConnection.query(query);
+        ObservableList<String> contactList = FXCollections.observableArrayList();
+
+        while (contacts.next()){
+            Contact contact = new Contact();
+            contact.setName(contacts.getString("Contact_Name"));
+            contactList.add(contact.getName());
+        }
+        return contactList;
+    }
+
+    private String getContactID(String name) throws Exception {
+        String query = "SELECT * FROM contacts WHERE Contact_Name = \"" + name + "\";";
+        ResultSet contacts = DBConnection.query(query);
+        contacts.next();
+        System.out.println(contacts.getString("Contact_ID"));
+        return contacts.getString("Contact_ID");
+    }
+
+    private Appointment createAppointment() throws Exception {
         Appointment appt = new Appointment();
         appt.set_id(appointment_id.getText());
         appt.set_title(title.getText());
@@ -231,7 +254,9 @@ public class EditController {
         appt.set_lastUpdatedBy(last_updated_by.getText());
         appt.set_customerID(customer_id.getText());
         appt.set_userID(user_id.getText());
-        // appt.set_contactID();
+        if (!contact_name.getSelectionModel().isEmpty()){
+            appt.set_contactID(getContactID(contact_name.getValue()));
+        }
 
         return appt;
     }
