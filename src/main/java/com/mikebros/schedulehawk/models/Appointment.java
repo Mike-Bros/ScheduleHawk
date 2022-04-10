@@ -1,6 +1,7 @@
 package com.mikebros.schedulehawk.models;
 
 
+import com.mikebros.schedulehawk.DBConnection;
 import javafx.scene.control.Button;
 
 /**
@@ -301,7 +302,16 @@ public class Appointment {
         return this.editButton;
     }
 
-    public void create() {
+    public void create() throws Exception {
+        String query = "INSERT INTO appointments " +
+                "(Title, Description, Location, Type, Start, End, Create_Date, Created_By, " +
+                "Last_Update, Last_Updated_by, Customer_ID, User_ID, Contact_ID) " +
+                "VALUES ('" + this.title + "', '" + this.description + "', '" + this.location + "', '"
+                + this.type + "', '" + this.start + "', '" + this.end + "', '" + this.createDate+ "', '"
+                + this.createdBy + "', '" + this.lastUpdate + "', '" + this.lastUpdatedBy + "', '"
+                + this.customerID + "', '" + this.userID + "', '" + this.contactID + "');";
+        System.out.println(query);
+        DBConnection.update(query);
     }
 
     public void update() {

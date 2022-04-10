@@ -95,7 +95,7 @@ public class EditController {
     }
 
     @FXML
-    private void submitButtonClicked() throws Exception {
+    private void submitButtonClicked(ActionEvent event) throws Exception {
         err_message_label.setText("");
         if (Objects.equals(title.getText(), "")) {
             System.out.println("Title cannot be null");
@@ -112,7 +112,7 @@ public class EditController {
                 System.out.println("Creating new appointment");
                 Appointment appt = createAppointment();
                 appt.create();
-
+                ScheduleHawkApplication.changeScene(event,"dashboard-view");
             } else {
                 System.out.println("Updating existing appointment");
                 Appointment appt = createAppointment();
@@ -142,9 +142,13 @@ public class EditController {
             }
         }
         start_hour.setItems(hours);
+        start_hour.getSelectionModel().selectFirst();
         end_hour.setItems(hours);
+        end_hour.getSelectionModel().selectFirst();
         create_date_hour.setItems(hours);
+        create_date_hour.getSelectionModel().selectFirst();
         last_update_hour.setItems(hours);
+        last_update_hour.getSelectionModel().selectFirst();;
 
         ObservableList<String> minutes = FXCollections.observableArrayList();
         for (int i = 0; i <= 60; i++) {
@@ -155,9 +159,13 @@ public class EditController {
             }
         }
         start_min.setItems(minutes);
+        start_min.getSelectionModel().selectFirst();
         end_min.setItems(minutes);
+        end_min.getSelectionModel().selectFirst();
         create_date_min.setItems(minutes);
+        create_date_min.getSelectionModel().selectFirst();
         last_update_min.setItems(minutes);
+        last_update_min.getSelectionModel().selectFirst();
 
         contact_name.setItems(getContactNamesFromDB());
     }

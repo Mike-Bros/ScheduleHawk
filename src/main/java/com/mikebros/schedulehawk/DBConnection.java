@@ -44,4 +44,9 @@ public class DBConnection {
         makeConnection();
         return conn.createStatement().executeQuery(query);
     }
+
+    public static void update(String query) throws Exception {
+        makeConnection();
+        conn.createStatement().executeUpdate(query);
+    }
 }
