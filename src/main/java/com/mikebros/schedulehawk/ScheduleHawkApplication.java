@@ -1,5 +1,6 @@
 package com.mikebros.schedulehawk;
 
+import com.mikebros.schedulehawk.models.User;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +15,7 @@ import java.util.Objects;
  */
 public class ScheduleHawkApplication extends Application {
     public static ActionEvent lastSceneChangeEvent;
+    public static User activeUser;
 
     /**
      * Instantiates a new Schedule Hawk application.
@@ -54,6 +56,14 @@ public class ScheduleHawkApplication extends Application {
             e.printStackTrace();
             System.out.println("......................................................................................");
         }
+    }
+
+    public static void setActiveUser(User activeUser) {
+        ScheduleHawkApplication.activeUser = activeUser;
+    }
+
+    public static User getActiveUser() {
+        return activeUser;
     }
 
     public static void main(String[] args) {

@@ -2,6 +2,7 @@ package com.mikebros.schedulehawk.controller;
 
 import com.mikebros.schedulehawk.DBConnection;
 import com.mikebros.schedulehawk.ScheduleHawkApplication;
+import com.mikebros.schedulehawk.models.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -76,7 +77,7 @@ public class LoginController{
     }
 
     /**
-     * Validate the user login.
+     * Validate the user login and set the application's active user.
      *
      * @param user     the username
      * @param password the password
@@ -87,10 +88,17 @@ public class LoginController{
         String query = "SELECT * FROM users WHERE ";
         query += "User_Name='" + user + "' AND ";
         query += "Password='" + password + "';";
-
         ResultSet rs = DBConnection.query(query);
+        boolean isValid = rs.next();
 
-        return rs.next();
+        if (isValid){
+            User activeUser = new User();
+            activeUser.setId(rs.getString("User_ID"));
+            activeUser.setName(rs.getString("User_Name"));
+            ScheduleHawkApplication.setActiveUser(activeUser);
+        }
+
+        return isValid;
     }
 
     /**

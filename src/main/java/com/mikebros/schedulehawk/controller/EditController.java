@@ -4,6 +4,7 @@ import com.mikebros.schedulehawk.DBConnection;
 import com.mikebros.schedulehawk.ScheduleHawkApplication;
 import com.mikebros.schedulehawk.models.Appointment;
 import com.mikebros.schedulehawk.models.Contact;
+import com.mikebros.schedulehawk.models.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,7 +13,10 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 
 import java.sql.ResultSet;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
@@ -85,11 +89,11 @@ public class EditController {
     private void setFormFields() throws Exception {
         setComboBoxes();
         err_message_label.setText("");
+
         if (Objects.equals(userData, "new")) {
-            appointment_id.setText("new appt");
-            submit_button.setText("Create");
+            setNewUserFields();
         } else {
-            setPrefilledFields(userData);
+            setEditUserFields(userData);
             submit_button.setText("Update");
         }
     }
@@ -178,7 +182,27 @@ public class EditController {
         contact_name.setItems(getContactNamesFromDB());
     }
 
-    private void setPrefilledFields(String appointmentId) throws Exception {
+    private void setNewUserFields() {
+        User activeUser = ScheduleHawkApplication.getActiveUser();
+        appointment_id.setText("new appt");
+        submit_button.setText("Create");
+        user_id.setText(activeUser.getId());
+        created_by.setText(activeUser.getName());
+        last_updated_by.setText(activeUser.getName());
+        create_date_date.setValue(LocalDate.now());
+        last_update_date.setValue(LocalDate.now());
+
+        System.out.println(LocalTime.now().toString());
+        String[] arrStr = LocalTime.now().toString().split(":");
+        String localHour = arrStr[0];
+        String localMin = arrStr[1];
+        create_date_hour.setValue(localHour);
+        create_date_min.setValue(localMin);
+        last_update_hour.setValue(localHour);
+        last_update_min.setValue(localMin);
+    }
+
+    private void setEditUserFields(String appointmentId) throws Exception {
         Appointment appointment = createAppointmentFromDB(appointmentId);
 
         appointment_id.setText(appointment.getId());

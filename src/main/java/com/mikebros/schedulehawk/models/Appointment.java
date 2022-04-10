@@ -4,6 +4,11 @@ package com.mikebros.schedulehawk.models;
 import com.mikebros.schedulehawk.DBConnection;
 import javafx.scene.control.Button;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.*;
+import java.util.TimeZone;
+
 /**
  * The type Appointment.
  */
@@ -302,12 +307,32 @@ public class Appointment {
         return this.editButton;
     }
 
+    private void convertDatesToUTC(){
+        this.start = convertUTC(this.start);
+        this.end = convertUTC(this.end);
+        this.createDate = convertUTC(this.createDate);
+        this.lastUpdate = convertUTC(this.lastUpdate);
+    }
+
+    private String convertUTC(String dt){
+        LocalDate localDate = LocalDate.parse(dt.split(" ")[0]);
+        LocalTime localTime = LocalTime.parse(dt.split(" ")[1]);
+        ZonedDateTime zonedDateTime = ZonedDateTime.of(localDate, localTime, ZoneId.systemDefault());
+
+        dt = zonedDateTime.withZoneSameInstant(ZoneId.of("UTC")).toString();
+        dt = dt.replace("Z[UTC]", "");
+        dt = dt.replace("T", " ");
+        return dt;
+    }
+
     public void create() throws Exception {
+        convertDatesToUTC();
+
         String query = "INSERT INTO appointments " +
                 "(Title, Description, Location, Type, Start, End, Create_Date, Created_By, " +
                 "Last_Update, Last_Updated_by, Customer_ID, User_ID, Contact_ID) " +
                 "VALUES ('" + this.title + "', '" + this.description + "', '" + this.location + "', '"
-                + this.type + "', '" + this.start + "', '" + this.end + "', '" + this.createDate+ "', '"
+                + this.type + "', '" + this.start + "', '" + this.end + "', '" + this.createDate + "', '"
                 + this.createdBy + "', '" + this.lastUpdate + "', '" + this.lastUpdatedBy + "', '"
                 + this.customerID + "', '" + this.userID + "', '" + this.contactID + "');";
         System.out.println(query);
