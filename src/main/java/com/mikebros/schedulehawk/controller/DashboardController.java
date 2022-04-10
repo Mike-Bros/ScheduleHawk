@@ -24,9 +24,9 @@ public class DashboardController{
     @FXML
     private TableColumn<Appointment, String> contactID;
     @FXML
-    private TableColumn<Appointment, String> edit;
+    private TableColumn<Appointment, String> apptEdit;
     @FXML
-    private TableColumn<Appointment, String> delete;
+    private TableColumn<Appointment, String> apptDelete;
     @FXML
     private TableColumn<Appointment, String> start;
     @FXML
@@ -40,21 +40,42 @@ public class DashboardController{
     @FXML
     private TableColumn<Appointment, String> userID;
     @FXML
-    private TableColumn<Appointment, String> createdBy;
+    private TableColumn<Appointment, String> apptCreatedBy;
     @FXML
-    private TableColumn<Appointment, String> lastUpdate;
+    private TableColumn<Appointment, String> apptLastUpdate;
     @FXML
-    private TableColumn<Appointment, String> lastUpdatedBy;
+    private TableColumn<Appointment, String> apptLastUpdatedBy;
     @FXML
     private TableColumn<Appointment, String> customerID;
     @FXML
     private TableColumn<Appointment, String> end;
     @FXML
-    private TableColumn<Appointment, String> createDate;
+    private TableColumn<Appointment, String> apptCreateDate;
     @FXML
     private Button createAppointment;
     @FXML
     private Button logout;
+    @FXML
+    private TableView<?> customerTable;
+    @FXML
+    private TableColumn<?, ?> postalCode;
+    @FXML
+    private TableColumn<?, ?> customerCreatedBy;
+    @FXML
+    private TableColumn<?, ?> customerDelete;
+    @FXML
+    private TableColumn<?, ?> address;
+    @FXML
+    private Button createCustomer;
+    @FXML
+    private TableColumn<?, ?> customerLastUpdatedBy;
+    @FXML
+    private TableColumn<?, ?> customerEdit;
+    @FXML
+    private TableColumn<?, ?> customerName;
+    @FXML
+    private TableColumn<?, ?> phone;
+
 
     /**
      * Initialize the dashboard-view.fxml.
@@ -96,12 +117,12 @@ public class DashboardController{
             Button editButton = new Button();
             editButton.setText("edit");
             editButton.setUserData(appointments.getString("Appointment_ID"));
-            editButton.setOnAction(this::editButtonClicked);
+            editButton.setOnAction(this::editApptButtonClicked);
 
             Button deleteButton = new Button();
             deleteButton.setText("delete");
             deleteButton.setUserData(appointments.getString("Appointment_ID"));
-            deleteButton.setOnAction(this::deleteButtonClicked);
+            deleteButton.setOnAction(this::deleteApptButtonClicked);
 
             appt.set_id(appointments.getString("Appointment_ID"));
             appt.set_title(appointments.getString("Title"));
@@ -139,26 +160,26 @@ public class DashboardController{
         customerID.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         contactID.setCellValueFactory(new PropertyValueFactory<>("contactId"));
         userID.setCellValueFactory(new PropertyValueFactory<>("userId"));
-        createDate.setCellValueFactory(new PropertyValueFactory<>("createDate"));
-        createdBy.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
-        lastUpdate.setCellValueFactory(new PropertyValueFactory<>("lastUpdate"));
-        lastUpdatedBy.setCellValueFactory(new PropertyValueFactory<>("lastUpdatedBy"));
-        edit.setCellValueFactory(new PropertyValueFactory<>("editButton"));
-        delete.setCellValueFactory(new PropertyValueFactory<>("deleteButton"));
+        apptCreateDate.setCellValueFactory(new PropertyValueFactory<>("createDate"));
+        apptCreatedBy.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
+        apptLastUpdate.setCellValueFactory(new PropertyValueFactory<>("lastUpdate"));
+        apptLastUpdatedBy.setCellValueFactory(new PropertyValueFactory<>("lastUpdatedBy"));
+        apptEdit.setCellValueFactory(new PropertyValueFactory<>("editButton"));
+        apptDelete.setCellValueFactory(new PropertyValueFactory<>("deleteButton"));
         appointmentTable.setItems(appointmentList);
     }
 
     @FXML
-    private void editButtonClicked(ActionEvent event) {
+    private void editApptButtonClicked(ActionEvent event) {
         Node node = (Node) event.getSource();
         System.out.println("Clicked on the edit button for appointment: " + node.getUserData());
         System.out.println(event);
-        //Change scene to the edit-view where Appointment_ID = buttonId
-        ScheduleHawkApplication.changeScene(event,"edit-view");
+        //Change scene to the appointment-edit-view where Appointment_ID = buttonId
+        ScheduleHawkApplication.changeScene(event,"appointment-edit-view");
 
     }
 
-    private void deleteButtonClicked(ActionEvent event){
+    private void deleteApptButtonClicked(ActionEvent event){
         Node node = (Node) event.getSource();
         System.out.println("Clicked on the delete button for appointment: " + node.getUserData());
         System.out.println(event);
@@ -180,7 +201,14 @@ public class DashboardController{
     private void createNewAppointmentButtonClicked(ActionEvent event){
         System.out.println("Clicked on the button to create a new appointment...");
         System.out.println(event);
-        ScheduleHawkApplication.changeScene(event,"edit-view");
+        ScheduleHawkApplication.changeScene(event,"appointment-edit-view");
+    }
+
+    @FXML
+    private void createNewCustomerButtonClicked(ActionEvent event){
+        System.out.println("Clicked on the button to create a new customer...");
+        System.out.println(event);
+        ScheduleHawkApplication.changeScene(event,"customer-edit-view");
     }
 
     public void logoutButtonClicked(ActionEvent event) {

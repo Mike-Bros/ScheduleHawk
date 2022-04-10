@@ -3,11 +3,7 @@ package com.mikebros.schedulehawk.models;
 
 import com.mikebros.schedulehawk.DBConnection;
 import javafx.scene.control.Button;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.*;
-import java.util.TimeZone;
 
 /**
  * The type Appointment.

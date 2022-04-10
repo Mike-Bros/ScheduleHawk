@@ -9,7 +9,9 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1720.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mikebros.schedulehawk.controller.DashboardController">
    <children>
-      <TableView fx:id="appointmentTable" layoutX="50.0" layoutY="175.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="870.0" prefWidth="1620.0">
+      <Button fx:id="logout" layoutX="50.0" layoutY="40.0" mnemonicParsing="false" onAction="#logoutButtonClicked" text="Logout" />
+      <Button fx:id="createAppointment" layoutX="50.0" layoutY="130.0" mnemonicParsing="false" onAction="#createNewAppointmentButtonClicked" text="Create New Appointment" />
+      <TableView fx:id="appointmentTable" layoutX="50.0" layoutY="175.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="462.0" prefWidth="1620.0">
          <columns>
             <TableColumn fx:id="start" text="Start" />
             <TableColumn fx:id="end" text="End" />
@@ -20,15 +22,28 @@
             <TableColumn fx:id="customerID" text="Customer_ID" />
             <TableColumn fx:id="contactID" text="Contact_ID" />
             <TableColumn fx:id="userID" text="User_ID" />
-            <TableColumn fx:id="createDate" text="Create_Date" />
-            <TableColumn fx:id="createdBy" text="Created_By" />
-            <TableColumn fx:id="lastUpdate" text="Last_Update" />
-            <TableColumn fx:id="lastUpdatedBy" text="Last_Updated_By" />
-            <TableColumn fx:id="edit" text="Edit" />
-            <TableColumn fx:id="delete" text="Delete" />
+            <TableColumn fx:id="apptCreateDate" text="Create_Date" />
+            <TableColumn fx:id="apptCreatedBy" text="Created_By" />
+            <TableColumn fx:id="apptLastUpdate" text="Last_Update" />
+            <TableColumn fx:id="apptLastUpdatedBy" text="Last_Updated_By" />
+            <TableColumn fx:id="apptEdit" text="Edit" />
+            <TableColumn fx:id="apptDelete" text="Delete" />
          </columns>
       </TableView>
-      <Button fx:id="createAppointment" layoutX="50.0" layoutY="130.0" mnemonicParsing="false" onAction="#createNewAppointmentButtonClicked" text="Create New Appointment" />
-      <Button fx:id="logout" layoutX="50.0" layoutY="40.0" mnemonicParsing="false" onAction="#logoutButtonClicked" text="Logout" />
+      <Button fx:id="createCustomer" layoutX="50.0" layoutY="670.0" mnemonicParsing="false" onAction="#createNewCustomerButtonClicked" text="Create New Customer" />
+      <TableView fx:id="customerTable" layoutX="50.0" layoutY="712.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="330.0" prefWidth="1620.0">
+         <columns>
+            <TableColumn fx:id="customerName" text="Customer Name" />
+            <TableColumn fx:id="address" text="Address" />
+            <TableColumn fx:id="postalCode" text="Postal Code" />
+            <TableColumn fx:id="phone" text="Phone" />
+            <TableColumn fx:id="customerCreateDate" text="Create Date" />
+            <TableColumn fx:id="customerCreatedBy" text="Created_By" />
+            <TableColumn fx:id="customerLastUpdate" text="Last_Update" />
+            <TableColumn fx:id="customerLastUpdatedBy" text="Last_Updated_By" />
+            <TableColumn fx:id="customerDelete" text="Delete" />
+            <TableColumn fx:id="customerEdit" text="Edit" />
+         </columns>
+      </TableView>
    </children>
 </Pane>
