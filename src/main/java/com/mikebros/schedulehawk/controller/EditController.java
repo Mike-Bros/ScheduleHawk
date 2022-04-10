@@ -105,9 +105,6 @@ public class EditController {
                 || last_update_min.getSelectionModel().isEmpty()) {
             System.out.println("last updated time cannot be null");
             err_message_label.setText("Last Updated Time cannot be empty");
-        } else if (validDateTimes()) {
-            System.out.println("not all dates and times are valid format");
-            err_message_label.setText("Make sure all dates and times are a valid format");
         } else {
             if (Objects.equals(userData, "new")) {
                 System.out.println("Creating new appointment");
@@ -257,7 +254,4 @@ public class EditController {
         return arrStr[1];
     }
 
-    private Boolean validDateTimes(){
-        return true;
-    }
 }
