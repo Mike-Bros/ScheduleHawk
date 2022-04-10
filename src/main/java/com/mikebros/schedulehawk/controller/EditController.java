@@ -100,23 +100,30 @@ public class EditController {
         if (Objects.equals(title.getText(), "")) {
             System.out.println("Title cannot be null");
             err_message_label.setText("Title cannot be empty");
-        } else if (last_update_date.getValue() == null) {
-            System.out.println("last updated date cannot be null");
-            err_message_label.setText("Last Updated Date cannot be empty");
-        } else if (last_update_hour.getSelectionModel().isEmpty()
-                || last_update_min.getSelectionModel().isEmpty()) {
-            System.out.println("last updated time cannot be null");
-            err_message_label.setText("Last Updated Time cannot be empty");
+        } else if (start_date.getValue() == null
+                || end_date.getValue() == null
+                || create_date_date.getValue() == null
+                || last_update_date.getValue() == null) {
+            System.out.println("Dates cannot be null");
+            err_message_label.setText("At least one date is not set, please set all dates");
+        } else if (contact_name.getValue() == null){
+            System.out.println("Contact cannot be null");
+            err_message_label.setText("Please select a contact");
+        }else if (Objects.equals(customer_id.getText(), "")
+                || Objects.equals(user_id.getText(), "")) {
+            System.out.println("ID fields cannot be null");
+            err_message_label.setText("Neither Customer or User ID can be empty");
         } else {
             if (Objects.equals(userData, "new")) {
                 System.out.println("Creating new appointment");
                 Appointment appt = createAppointment();
                 appt.create();
-                ScheduleHawkApplication.changeScene(event,"dashboard-view");
+                ScheduleHawkApplication.changeScene(event, "dashboard-view");
             } else {
                 System.out.println("Updating existing appointment");
                 Appointment appt = createAppointment();
                 appt.update();
+                ScheduleHawkApplication.changeScene(event, "dashboard-view");
             }
         }
     }
@@ -148,7 +155,8 @@ public class EditController {
         create_date_hour.setItems(hours);
         create_date_hour.getSelectionModel().selectFirst();
         last_update_hour.setItems(hours);
-        last_update_hour.getSelectionModel().selectFirst();;
+        last_update_hour.getSelectionModel().selectFirst();
+        ;
 
         ObservableList<String> minutes = FXCollections.observableArrayList();
         for (int i = 0; i <= 60; i++) {
@@ -231,7 +239,7 @@ public class EditController {
         ResultSet contacts = DBConnection.query(query);
         ObservableList<String> contactList = FXCollections.observableArrayList();
 
-        while (contacts.next()){
+        while (contacts.next()) {
             Contact contact = new Contact();
             contact.setName(contacts.getString("Contact_Name"));
             contactList.add(contact.getName());
@@ -262,7 +270,7 @@ public class EditController {
         appt.set_lastUpdatedBy(last_updated_by.getText());
         appt.set_customerID(customer_id.getText());
         appt.set_userID(user_id.getText());
-        if (!contact_name.getSelectionModel().isEmpty()){
+        if (!contact_name.getSelectionModel().isEmpty()) {
             appt.set_contactID(getContactID(contact_name.getValue()));
         }
 

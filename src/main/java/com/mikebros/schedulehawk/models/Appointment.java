@@ -314,6 +314,23 @@ public class Appointment {
         DBConnection.update(query);
     }
 
-    public void update() {
+    public void update() throws Exception {
+        String query = "UPDATE appointments " +
+                "SET Title = '" + this.title + "', " +
+                "Description = '" + this.description + "', " +
+                "Location = '" + this.location + "', " +
+                "Type = '" + this.type + "', " +
+                "Start = '" + this.start + "', " +
+                "End = '" + this.end + "', " +
+                "Create_Date = '" + this.createDate + "', " +
+                "Created_By = '" + this.createdBy + "', " +
+                "Last_Update = '" + this.lastUpdate + "', " +
+                "Last_Updated_by = '" + this.lastUpdatedBy + "', " +
+                "Customer_ID = '" + this.customerID + "', " +
+                "User_ID = '" + this.userID + "', " +
+                "Contact_ID = '" + this.contactID + "' " +
+                "WHERE Appointment_ID = " + this.id + ";";
+        System.out.println(query);
+        DBConnection.update(query);
     }
 }
