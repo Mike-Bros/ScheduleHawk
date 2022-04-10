@@ -8,10 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.sql.ResultSet;
 import java.time.LocalDate;
@@ -34,7 +31,7 @@ public class EditController {
     @FXML
     private ComboBox<?> contact_name;
     @FXML
-    private TextField contact_id;
+    private TextField user_id;
     @FXML
     private Button back_button;
     @FXML
@@ -67,6 +64,10 @@ public class EditController {
     private DatePicker start_date;
     @FXML
     private DatePicker last_update_date;
+    @FXML
+    private Button submit_button;
+    @FXML
+    private Label err_message_label;
 
     public void initialize() throws Exception {
         System.out.println("......................................................................................");
@@ -81,10 +82,43 @@ public class EditController {
 
     private void setFormFields() throws Exception {
         setComboBoxes();
+        err_message_label.setText("");
         if (Objects.equals(userData, "new")) {
             appointment_id.setText("new appt");
+            submit_button.setText("Create");
         } else {
             setPrefilledFields(userData);
+            submit_button.setText("Update");
+        }
+    }
+
+    @FXML
+    private void submitButtonClicked() {
+        err_message_label.setText("");
+        if (Objects.equals(title.getText(), "")) {
+            System.out.println("Title cannot be null");
+            err_message_label.setText("Title cannot be empty");
+        } else if (last_update_date.getValue() == null) {
+            System.out.println("last updated date cannot be null");
+            err_message_label.setText("Last Updated Date cannot be empty");
+        } else if (last_update_hour.getSelectionModel().isEmpty()
+                || last_update_min.getSelectionModel().isEmpty()) {
+            System.out.println("last updated time cannot be null");
+            err_message_label.setText("Last Updated Time cannot be empty");
+        } else if (validDateTimes()) {
+            System.out.println("not all dates and times are valid format");
+            err_message_label.setText("Make sure all dates and times are a valid format");
+        } else {
+            if (Objects.equals(userData, "new")) {
+                System.out.println("Creating new appointment");
+                Appointment appt = createAppointment();
+                appt.create();
+
+            } else {
+                System.out.println("Updating existing appointment");
+                Appointment appt = createAppointment();
+                appt.update();
+            }
         }
     }
 
@@ -101,10 +135,10 @@ public class EditController {
 
     private void setComboBoxes() {
         ObservableList<String> hours = FXCollections.observableArrayList();
-        for (int i=1; i<=24; i++){
-            if (i<10){
+        for (int i = 1; i <= 24; i++) {
+            if (i < 10) {
                 hours.add("0" + String.valueOf(i));
-            }else{
+            } else {
                 hours.add(String.valueOf(i));
             }
         }
@@ -114,10 +148,10 @@ public class EditController {
         last_update_hour.setItems(hours);
 
         ObservableList<String> minutes = FXCollections.observableArrayList();
-        for (int i=0; i<=60; i++){
-            if (i<10){
+        for (int i = 0; i <= 60; i++) {
+            if (i < 10) {
                 minutes.add("0" + String.valueOf(i));
-            }else{
+            } else {
                 minutes.add(String.valueOf(i));
             }
         }
@@ -128,7 +162,7 @@ public class EditController {
     }
 
     private void setPrefilledFields(String appointmentId) throws Exception {
-        Appointment appointment = createAppointment(appointmentId);
+        Appointment appointment = createAppointmentFromDB(appointmentId);
 
         appointment_id.setText(appointment.getId());
         title.setText(appointment.getTitle());
@@ -136,7 +170,7 @@ public class EditController {
         location_field.setText(appointment.getLocation());
         type.setText(appointment.getType());
         // need to add functionality to populate contact names and put a placeholder here based on contact_id
-        contact_id.setText(appointment.getContactId());
+        user_id.setText(appointment.getUserId());
         customer_id.setText(appointment.getCustomerId());
 
         start_date.setValue(getLocalDate(appointment.getStart()));
@@ -159,15 +193,13 @@ public class EditController {
         last_updated_by.setText(appointment.getLastUpdatedBy());
     }
 
-    private Appointment createAppointment(String appointmentId) throws Exception {
+    private Appointment createAppointmentFromDB(String appointmentId) throws Exception {
         String query = "SELECT * FROM appointments WHERE Appointment_ID = " + appointmentId + ";";
         ResultSet appointment = DBConnection.query(query);
 
         Appointment appt = new Appointment();
-        Button editButton = new Button();
-        editButton.setText("edit");
-
         appointment.next();
+
         appt.set_id(appointment.getString("Appointment_ID"));
         appt.set_title(appointment.getString("Title"));
         appt.set_description(appointment.getString("Description"));
@@ -186,22 +218,46 @@ public class EditController {
         return appt;
     }
 
-    private LocalDate getLocalDate(String dateTime){
+    private Appointment createAppointment() {
+        Appointment appt = new Appointment();
+        appt.set_id(appointment_id.getText());
+        appt.set_title(title.getText());
+        appt.set_description(description.getText());
+        appt.set_location(location_field.getText());
+        appt.set_type(type.getText());
+        // appt.set_start();
+        // appt.set_end();
+        //appt.set_createDate();
+        appt.set_createdBy(created_by.getText());
+        // appt.set_lastUpdate();
+        appt.set_lastUpdatedBy(last_updated_by.getText());
+        appt.set_customerID(customer_id.getText());
+        appt.set_userID(user_id.getText());
+        // appt.set_contactID();
+
+        return appt;
+    }
+
+    private LocalDate getLocalDate(String dateTime) {
         String[] arrStr = dateTime.split(" ");
         for (String a : arrStr)
             System.out.println(a);
         return LocalDate.parse(arrStr[0]);
     }
 
-    private String getHour(String dateTime){
+    private String getHour(String dateTime) {
         String[] arrStr = dateTime.split(" ");
         arrStr = arrStr[1].split(":");
         return arrStr[0];
     }
 
-    private String getMinutes(String dateTime){
+    private String getMinutes(String dateTime) {
         String[] arrStr = dateTime.split(" ");
         arrStr = arrStr[1].split(":");
         return arrStr[1];
+    }
+
+    private Boolean validDateTimes(){
+        return true;
     }
 }

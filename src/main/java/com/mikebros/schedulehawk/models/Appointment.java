@@ -302,4 +302,9 @@ public class Appointment {
         return this.editButton;
     }
 
+    public void create() {
+    }
+
+    public void update() {
+    }
 }

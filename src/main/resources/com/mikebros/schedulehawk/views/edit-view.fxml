@@ -10,6 +10,16 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1720.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mikebros.schedulehawk.controller.EditController">
    <children>
+      <Text fx:id="err_message_text" fill="#d00000" layoutX="698.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" underline="true" wrappingWidth="188.716796875">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Text>
+      <Label fx:id="err_message_label" alignment="CENTER" layoutY="43.0" prefHeight="35.0" prefWidth="1720.0" textAlignment="CENTER" textFill="#9a0d0d">
+         <font>
+            <Font name="System Italic" size="24.0" />
+         </font>
+      </Label>
       <Button fx:id="back_button" layoutX="50.0" layoutY="44.0" mnemonicParsing="false" onAction="#backButtonClicked" text="Back" />
       <Text layoutX="159.0" layoutY="58.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Appointment ID" wrappingWidth="103.716796875" />
       <TextField fx:id="appointment_id" editable="false" layoutX="159.0" layoutY="71.0" prefHeight="29.0" prefWidth="104.0" />
@@ -29,7 +39,7 @@
       <DatePicker fx:id="end_date" layoutX="479.0" layoutY="330.0" prefHeight="29.0" prefWidth="104.0" promptText="date" />
       <ComboBox fx:id="end_hour" editable="true" layoutX="598.0" layoutY="330.0" prefHeight="29.0" prefWidth="78.0" promptText="hour" />
       <ComboBox fx:id="end_min" editable="true" layoutX="686.0" layoutY="330.0" prefHeight="29.0" prefWidth="78.0" promptText="min" />
-      <Text layoutX="159.0" layoutY="405.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create Date" wrappingWidth="188.716796875" />
+      <Text layoutX="159.0" layoutY="404.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create Date" wrappingWidth="188.716796875" />
       <DatePicker fx:id="create_date_date" layoutX="159.0" layoutY="417.0" prefHeight="29.0" prefWidth="104.0" promptText="date" />
       <ComboBox fx:id="create_date_hour" editable="true" layoutX="280.0" layoutY="417.0" prefHeight="29.0" prefWidth="78.0" promptText="hour" />
       <ComboBox fx:id="create_date_min" editable="true" layoutX="368.0" layoutY="416.0" prefHeight="29.0" prefWidth="78.0" promptText="min" />
@@ -45,7 +55,8 @@
       <ComboBox fx:id="contact_name" layoutX="159.0" layoutY="244.0" prefHeight="29.0" prefWidth="189.0" />
       <Text layoutX="384.0" layoutY="229.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Customer ID" wrappingWidth="161.716796875" />
       <TextField fx:id="customer_id" layoutX="384.0" layoutY="244.0" />
-      <Text layoutX="573.0" layoutY="229.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Contact ID" wrappingWidth="161.716796875" />
-      <TextField fx:id="contact_id" layoutX="573.0" layoutY="244.0" />
+      <Text layoutX="573.0" layoutY="229.0" strokeType="OUTSIDE" strokeWidth="0.0" text="User ID" wrappingWidth="161.716796875" />
+      <TextField fx:id="user_id" layoutX="573.0" layoutY="244.0" />
+      <Button fx:id="submit_button" layoutX="50.0" layoutY="540.0" mnemonicParsing="false" onAction="#submitButtonClicked" />
    </children>
 </Pane>
