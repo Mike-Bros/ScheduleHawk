@@ -153,6 +153,7 @@ public class DashboardController{
     @FXML
     private void createNewAppointmentButtonClicked(ActionEvent event){
         System.out.println("Clicked on the button to create a new appointment...");
+        System.out.println(event);
         ScheduleHawkApplication.changeScene(event,"edit-view");
     }
 
