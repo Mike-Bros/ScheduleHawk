@@ -25,6 +25,7 @@
             <TableColumn fx:id="lastUpdate" text="Last_Update" />
             <TableColumn fx:id="lastUpdatedBy" text="Last_Updated_By" />
             <TableColumn fx:id="edit" text="Edit" />
+            <TableColumn fx:id="delete" text="Delete" />
          </columns>
       </TableView>
       <Button fx:id="createAppointment" layoutX="50.0" layoutY="130.0" mnemonicParsing="false" onAction="#createNewAppointmentButtonClicked" text="Create New Appointment" />

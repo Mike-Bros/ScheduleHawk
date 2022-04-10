@@ -28,6 +28,7 @@ public class Appointment {
     private String userID;
     private String contactID;
     private Button editButton;
+    private Button deleteButton;
 
     /**
      * Instantiates a new Appointment.
@@ -171,6 +172,10 @@ public class Appointment {
         this.editButton = button;
     }
 
+    public void set_deleteButton(Button button) {
+        this.deleteButton = button;
+    }
+
     /**
      * Get id string.
      *
@@ -307,14 +312,18 @@ public class Appointment {
         return this.editButton;
     }
 
-    private void convertDatesToUTC(){
+    public Button getDeleteButton() {
+        return this.deleteButton;
+    }
+
+    private void convertDatesToUTC() {
         this.start = convertUTC(this.start);
         this.end = convertUTC(this.end);
         this.createDate = convertUTC(this.createDate);
         this.lastUpdate = convertUTC(this.lastUpdate);
     }
 
-    private String convertUTC(String dt){
+    private String convertUTC(String dt) {
         LocalDate localDate = LocalDate.parse(dt.split(" ")[0]);
         LocalTime localTime = LocalTime.parse(dt.split(" ")[1]);
         ZonedDateTime zonedDateTime = ZonedDateTime.of(localDate, localTime, ZoneId.systemDefault());

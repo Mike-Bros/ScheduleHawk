@@ -107,10 +107,10 @@ public class EditController {
                 || last_update_date.getValue() == null) {
             System.out.println("Dates cannot be null");
             err_message_label.setText("At least one date is not set, please set all dates");
-        } else if (contact_name.getValue() == null){
+        } else if (contact_name.getValue() == null) {
             System.out.println("Contact cannot be null");
             err_message_label.setText("Please select a contact");
-        }else if (Objects.equals(customer_id.getText(), "")
+        } else if (Objects.equals(customer_id.getText(), "")
                 || Objects.equals(user_id.getText(), "")) {
             System.out.println("ID fields cannot be null");
             err_message_label.setText("Neither Customer or User ID can be empty");
@@ -209,10 +209,7 @@ public class EditController {
         type.setText(appointment.getType());
         user_id.setText(appointment.getUserId());
         customer_id.setText(appointment.getCustomerId());
-
         contact_name.setValue(getContactNameFromDB(appointment.getContactId()));
-
-
         start_date.setValue(getLocalDate(appointment.getStart()));
         start_hour.setValue(getHour(appointment.getStart()));
         start_min.setValue(getMinutes(appointment.getStart()));

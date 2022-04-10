@@ -26,6 +26,8 @@ public class DashboardController{
     @FXML
     private TableColumn<Appointment, String> edit;
     @FXML
+    private TableColumn<Appointment, String> delete;
+    @FXML
     private TableColumn<Appointment, String> start;
     @FXML
     private TableColumn<Appointment, String> title;
@@ -93,9 +95,13 @@ public class DashboardController{
             Appointment appt = new Appointment();
             Button editButton = new Button();
             editButton.setText("edit");
-            //editButton.setId(appointments.getString("Appointment_ID"));
             editButton.setUserData(appointments.getString("Appointment_ID"));
             editButton.setOnAction(this::editButtonClicked);
+
+            Button deleteButton = new Button();
+            deleteButton.setText("delete");
+            deleteButton.setUserData(appointments.getString("Appointment_ID"));
+            deleteButton.setOnAction(this::deleteButtonClicked);
 
             appt.set_id(appointments.getString("Appointment_ID"));
             appt.set_title(appointments.getString("Title"));
@@ -112,6 +118,7 @@ public class DashboardController{
             appt.set_userID(appointments.getString("User_ID"));
             appt.set_contactID(appointments.getString("Contact_ID"));
             appt.set_editButton(editButton);
+            appt.set_deleteButton(deleteButton);
             appointmentList.add(appt);
         }
         return appointmentList;
@@ -137,17 +144,36 @@ public class DashboardController{
         lastUpdate.setCellValueFactory(new PropertyValueFactory<>("lastUpdate"));
         lastUpdatedBy.setCellValueFactory(new PropertyValueFactory<>("lastUpdatedBy"));
         edit.setCellValueFactory(new PropertyValueFactory<>("editButton"));
+        delete.setCellValueFactory(new PropertyValueFactory<>("deleteButton"));
         appointmentTable.setItems(appointmentList);
     }
 
     @FXML
     private void editButtonClicked(ActionEvent event) {
         Node node = (Node) event.getSource();
-        System.out.println("Clicked on the button for appointment: " + node.getUserData());
+        System.out.println("Clicked on the edit button for appointment: " + node.getUserData());
         System.out.println(event);
         //Change scene to the edit-view where Appointment_ID = buttonId
         ScheduleHawkApplication.changeScene(event,"edit-view");
 
+    }
+
+    private void deleteButtonClicked(ActionEvent event){
+        Node node = (Node) event.getSource();
+        System.out.println("Clicked on the delete button for appointment: " + node.getUserData());
+        System.out.println(event);
+        deleteAppointment((String) node.getUserData());
+        ScheduleHawkApplication.changeScene(event,"dashboard-view");
+    }
+
+    private void deleteAppointment(String id){
+        System.out.println("Deleting: " + id);
+        String query = "DELETE FROM appointments WHERE Appointment_ID = " + id + ";";
+        try {
+            DBConnection.update(query);
+        }catch (Exception e){
+            System.out.println("Error occurred, unable to delete appointment");
+        }
     }
 
     @FXML
