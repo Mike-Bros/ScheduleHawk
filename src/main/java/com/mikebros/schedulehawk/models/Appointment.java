@@ -327,7 +327,6 @@ public class Appointment {
 
     public void create() throws Exception {
         convertDatesToUTC();
-
         String query = "INSERT INTO appointments " +
                 "(Title, Description, Location, Type, Start, End, Create_Date, Created_By, " +
                 "Last_Update, Last_Updated_by, Customer_ID, User_ID, Contact_ID) " +
@@ -340,6 +339,7 @@ public class Appointment {
     }
 
     public void update() throws Exception {
+        convertDatesToUTC();
         String query = "UPDATE appointments " +
                 "SET Title = '" + this.title + "', " +
                 "Description = '" + this.description + "', " +

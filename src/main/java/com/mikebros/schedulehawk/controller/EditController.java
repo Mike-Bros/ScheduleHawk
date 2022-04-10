@@ -13,10 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 
 import java.sql.ResultSet;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
@@ -213,6 +210,9 @@ public class EditController {
         user_id.setText(appointment.getUserId());
         customer_id.setText(appointment.getCustomerId());
 
+        contact_name.setValue(getContactNameFromDB(appointment.getContactId()));
+
+
         start_date.setValue(getLocalDate(appointment.getStart()));
         start_hour.setValue(getHour(appointment.getStart()));
         start_min.setValue(getMinutes(appointment.getStart()));
@@ -245,11 +245,11 @@ public class EditController {
         appt.set_description(appointment.getString("Description"));
         appt.set_location(appointment.getString("Location"));
         appt.set_type(appointment.getString("Type"));
-        appt.set_start(appointment.getString("Start"));
-        appt.set_end(appointment.getString("End"));
-        appt.set_createDate(appointment.getString("Create_Date"));
+        appt.set_start(convertFromUTC(appointment.getString("Start")));
+        appt.set_end(convertFromUTC(appointment.getString("End")));
+        appt.set_createDate(convertFromUTC(appointment.getString("Create_Date")));
         appt.set_createdBy(appointment.getString("Created_By"));
-        appt.set_lastUpdate(appointment.getString("Last_Update"));
+        appt.set_lastUpdate(convertFromUTC(appointment.getString("Last_Update")));
         appt.set_lastUpdatedBy(appointment.getString("Last_Updated_By"));
         appt.set_customerID(appointment.getString("Customer_ID"));
         appt.set_userID(appointment.getString("User_ID"));
@@ -269,6 +269,13 @@ public class EditController {
             contactList.add(contact.getName());
         }
         return contactList;
+    }
+
+    private String getContactNameFromDB(String contactId) throws Exception {
+        String query = "SELECT * FROM contacts WHERE Contact_ID = " + contactId + ";";
+        ResultSet contact = DBConnection.query(query);
+        contact.next();
+        return contact.getString("Contact_Name");
     }
 
     private String getContactID(String name) throws Exception {
@@ -323,5 +330,17 @@ public class EditController {
         String time = start_hour.getValue() + ":" + start_min.getValue() + ":00";
         return date + " " + time;
     }
+
+    private String convertFromUTC(String dt) {
+        LocalDate localDate = LocalDate.parse(dt.split(" ")[0]);
+        LocalTime localTime = LocalTime.parse(dt.split(" ")[1]);
+        ZonedDateTime zonedDateTime = ZonedDateTime.of(localDate, localTime, ZoneId.of("UTC"));
+
+        dt = zonedDateTime.withZoneSameInstant(ZoneId.systemDefault()).toString();
+        dt = dt.replace("-05:00[America/Chicago]", "");
+        dt = dt.replace("T", " ");
+        return dt;
+    }
+
 
 }
