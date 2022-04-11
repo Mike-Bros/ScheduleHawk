@@ -17,7 +17,7 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-public class EditController {
+public class EditAppointmentController {
 
     private String userData;
 
@@ -144,7 +144,7 @@ public class EditController {
         ObservableList<String> hours = FXCollections.observableArrayList();
         for (int i = 1; i <= 24; i++) {
             if (i < 10) {
-                hours.add("0" + String.valueOf(i));
+                hours.add("0" + i);
             } else {
                 hours.add(String.valueOf(i));
             }
@@ -157,12 +157,11 @@ public class EditController {
         create_date_hour.getSelectionModel().selectFirst();
         last_update_hour.setItems(hours);
         last_update_hour.getSelectionModel().selectFirst();
-        ;
 
         ObservableList<String> minutes = FXCollections.observableArrayList();
         for (int i = 0; i <= 60; i++) {
             if (i < 10) {
-                minutes.add("0" + String.valueOf(i));
+                minutes.add("0" + i);
             } else {
                 minutes.add(String.valueOf(i));
             }

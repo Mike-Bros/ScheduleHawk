@@ -3,6 +3,7 @@ package com.mikebros.schedulehawk.controller;
 import com.mikebros.schedulehawk.DBConnection;
 import com.mikebros.schedulehawk.ScheduleHawkApplication;
 import com.mikebros.schedulehawk.models.Appointment;
+import com.mikebros.schedulehawk.models.Customer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -56,25 +57,29 @@ public class DashboardController{
     @FXML
     private Button logout;
     @FXML
-    private TableView<?> customerTable;
+    private TableView<Customer> customerTable;
     @FXML
-    private TableColumn<?, ?> postalCode;
+    private TableColumn<Customer, String> postalCode;
     @FXML
-    private TableColumn<?, ?> customerCreatedBy;
+    private TableColumn<Customer, String> customerCreatedBy;
     @FXML
-    private TableColumn<?, ?> customerDelete;
+    private TableColumn<Customer, String> customerCreateDate;
     @FXML
-    private TableColumn<?, ?> address;
+    private TableColumn<Customer, String> customerDelete;
+    @FXML
+    private TableColumn<Customer, String> address;
     @FXML
     private Button createCustomer;
     @FXML
-    private TableColumn<?, ?> customerLastUpdatedBy;
+    private TableColumn<Customer, String> customerLastUpdatedBy;
     @FXML
-    private TableColumn<?, ?> customerEdit;
+    private TableColumn<Customer, String> customerLastUpdate;
     @FXML
-    private TableColumn<?, ?> customerName;
+    private TableColumn<Customer, String> customerEdit;
     @FXML
-    private TableColumn<?, ?> phone;
+    private TableColumn<Customer, String> customerName;
+    @FXML
+    private TableColumn<Customer, String> phone;
 
 
     /**
@@ -85,8 +90,10 @@ public class DashboardController{
     public void initialize() throws Exception {
         System.out.println("......................................................................................");
         System.out.println("Initializing Dashboard");
-        addRows(createAppointments(getAllAppointments()));
+        addApptRows(createAppointments(getAllAppointments()));
+        addCustomerRows(createCustomers(getAllCustomers()));
         createAppointment.setUserData("new");
+        createCustomer.setUserData("new");
         System.out.println("Finished initializing Dashboard");
         System.out.println("......................................................................................\n");
     }
@@ -99,6 +106,11 @@ public class DashboardController{
      */
     private ResultSet getAllAppointments() throws Exception {
         String query = "SELECT * FROM appointments;";
+        return DBConnection.query(query);
+    }
+
+    private ResultSet getAllCustomers() throws Exception {
+        String query = "SELECT * FROM customers;";
         return DBConnection.query(query);
     }
 
@@ -145,12 +157,43 @@ public class DashboardController{
         return appointmentList;
     }
 
+    private ObservableList<Customer> createCustomers(ResultSet customers) throws SQLException {
+        ObservableList<Customer> customerList = FXCollections.observableArrayList();
+
+        while (customers.next()){
+            Customer cust = new Customer();
+            Button editButton = new Button();
+            editButton.setText("edit");
+            editButton.setUserData(customers.getString("Customer_ID"));
+            editButton.setOnAction(this::editCustomerButtonClicked);
+
+            Button deleteButton = new Button();
+            deleteButton.setText("delete");
+            deleteButton.setUserData(customers.getString("Customer_ID"));
+            deleteButton.setOnAction(this::deleteCustomerButtonClicked);
+
+            cust.setId(customers.getString("Customer_ID"));
+            cust.setName(customers.getString("Customer_Name"));
+            cust.setAddress(customers.getString("Address"));
+            cust.setPostalCode(customers.getString("Postal_Code"));
+            cust.setPhone(customers.getString("Phone"));
+            cust.setCreateDate(customers.getString("Create_Date"));
+            cust.setCreatedBy(customers.getString("Created_By"));
+            cust.setLastUpdate(customers.getString("Last_Update"));
+            cust.setLastUpdatedBy(customers.getString("Last_Updated_By"));
+            cust.setEditButton(editButton);
+            cust.setDeleteButton(deleteButton);
+            customerList.add(cust);
+        }
+        return customerList;
+    }
+
     /**
      * Add appointment rows to dashboard.
      *
      * @param appointmentList the observable list of Appointment object(s)
      */
-    private void addRows(ObservableList<Appointment> appointmentList){
+    private void addApptRows(ObservableList<Appointment> appointmentList){
         start.setCellValueFactory(new PropertyValueFactory<>("start"));
         end.setCellValueFactory(new PropertyValueFactory<>("end"));
         title.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -169,6 +212,21 @@ public class DashboardController{
         appointmentTable.setItems(appointmentList);
     }
 
+    private void addCustomerRows(ObservableList<Customer> customerList){
+        customerName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        address.setCellValueFactory(new PropertyValueFactory<>("address"));
+        postalCode.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
+        phone.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        customerCreateDate.setCellValueFactory(new PropertyValueFactory<>("createDate"));
+        customerCreatedBy.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
+        customerLastUpdate.setCellValueFactory(new PropertyValueFactory<>("lastUpdate"));
+        customerLastUpdatedBy.setCellValueFactory(new PropertyValueFactory<>("lastUpdatedBy"));
+        customerDelete.setCellValueFactory(new PropertyValueFactory<>("editButton"));
+        customerEdit.setCellValueFactory(new PropertyValueFactory<>("deleteButton"));
+
+        customerTable.setItems(customerList);
+    }
+
     @FXML
     private void editApptButtonClicked(ActionEvent event) {
         Node node = (Node) event.getSource();
@@ -176,7 +234,6 @@ public class DashboardController{
         System.out.println(event);
         //Change scene to the appointment-edit-view where Appointment_ID = buttonId
         ScheduleHawkApplication.changeScene(event,"appointment-edit-view");
-
     }
 
     private void deleteApptButtonClicked(ActionEvent event){
@@ -190,6 +247,32 @@ public class DashboardController{
     private void deleteAppointment(String id){
         System.out.println("Deleting: " + id);
         String query = "DELETE FROM appointments WHERE Appointment_ID = " + id + ";";
+        try {
+            DBConnection.update(query);
+        }catch (Exception e){
+            System.out.println("Error occurred, unable to delete appointment");
+        }
+    }
+
+    private void editCustomerButtonClicked(ActionEvent event){
+        Node node = (Node) event.getSource();
+        System.out.println("Clicked on the edit button for customer: " + node.getUserData());
+        System.out.println(event);
+        //Change scene to the appointment-edit-view where Appointment_ID = buttonId
+        ScheduleHawkApplication.changeScene(event,"customer-edit-view");
+    }
+
+    private void deleteCustomerButtonClicked(ActionEvent event){
+        Node node = (Node) event.getSource();
+        System.out.println("Clicked on the delete button for customer: " + node.getUserData());
+        System.out.println(event);
+        deleteCustomer((String) node.getUserData());
+        ScheduleHawkApplication.changeScene(event,"dashboard-view");
+    }
+
+    private void deleteCustomer(String id){
+        System.out.println("Deleting: " + id);
+        String query = "DELETE FROM customers WHERE Customer_ID = " + id + ";";
         try {
             DBConnection.update(query);
         }catch (Exception e){
