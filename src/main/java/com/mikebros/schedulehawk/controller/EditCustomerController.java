@@ -1,6 +1,9 @@
 package com.mikebros.schedulehawk.controller;
 
+import com.mikebros.schedulehawk.DBConnection;
 import com.mikebros.schedulehawk.ScheduleHawkApplication;
+import com.mikebros.schedulehawk.models.Country;
+import com.mikebros.schedulehawk.models.FirstLevelDivision;
 import com.mikebros.schedulehawk.models.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
 
+import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
@@ -47,7 +51,9 @@ public class EditCustomerController {
     @FXML
     private TextField customer_id;
     @FXML
-    private ComboBox<String> divison_id;
+    private ComboBox<String> first_level_division;
+    @FXML
+    private ComboBox<String> country;
     @FXML
     private TextField postal_code;
     @FXML
@@ -134,6 +140,45 @@ public class EditCustomerController {
         create_date_min.getSelectionModel().selectFirst();
         last_update_min.setItems(minutes);
         last_update_min.getSelectionModel().selectFirst();
+
+        country.setItems(getCountriesFromDB());
+    }
+
+    private ObservableList<String> getCountriesFromDB() throws Exception {
+        String query = "SELECT * FROM countries";
+        ResultSet countries = DBConnection.query(query);
+        ObservableList<String> countryList = FXCollections.observableArrayList();
+
+        while (countries.next()){
+            Country country = new Country();
+            country.setCountry(countries.getString("Country"));
+            countryList.add(country.getCountry());
+        }
+        return countryList;
+    }
+
+    private String getCountryIDByName(String name) throws Exception {
+        String query = "SELECT * FROM countries WHERE country = \"" + name + "\"";
+        ResultSet countries = DBConnection.query(query);
+
+        if (countries.next()){
+            return countries.getString("Country_ID");
+        }else {
+            return "null";
+        }
+    }
+
+    private ObservableList<String> getFirstLevelDivisonsFromDB(String countryID) throws Exception {
+        String query = "SELECT * FROM first_level_divisions WHERE COUNTRY_ID = " + countryID;
+        ResultSet firstLevelDivisions = DBConnection.query(query);
+        ObservableList<String> firstLevelDivisionList = FXCollections.observableArrayList();
+
+        while (firstLevelDivisions.next()){
+            FirstLevelDivision firstLevelDivision = new FirstLevelDivision();
+            firstLevelDivision.setDivision(firstLevelDivisions.getString("Division"));
+            firstLevelDivisionList.add(firstLevelDivision.getDivision());
+        }
+        return firstLevelDivisionList;
     }
 
     public void backButtonClicked(ActionEvent event) {
@@ -143,5 +188,11 @@ public class EditCustomerController {
 
     public void submitButtonClicked(ActionEvent event) {
         err_message_label.setText("");
+    }
+
+    public void onCountrySelect(ActionEvent event) throws Exception {
+        System.out.println("Selected: " + country.getValue());
+        String countryID = getCountryIDByName(country.getValue());
+        first_level_division.setItems(getFirstLevelDivisonsFromDB(countryID));
     }
 }
