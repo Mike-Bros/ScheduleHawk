@@ -83,6 +83,12 @@ public class EditAppointmentController {
         System.out.println("......................................................................................\n");
     }
 
+    private void getUserData() {
+        ActionEvent loadEvent = ScheduleHawkApplication.lastSceneChangeEvent;
+        Node eventNode = (Node) loadEvent.getSource();
+        userData = (String) eventNode.getUserData();
+    }
+
     private void setFormFields() throws Exception {
         setComboBoxes();
         err_message_label.setText("");
@@ -91,7 +97,6 @@ public class EditAppointmentController {
             setNewUserFields();
         } else {
             setEditUserFields(userData);
-            submit_button.setText("Update");
         }
     }
 
@@ -129,12 +134,6 @@ public class EditAppointmentController {
         }
     }
 
-    private void getUserData() {
-        ActionEvent loadEvent = ScheduleHawkApplication.lastSceneChangeEvent;
-        Node eventNode = (Node) loadEvent.getSource();
-        userData = (String) eventNode.getUserData();
-    }
-
     public void backButtonClicked(ActionEvent event) {
         System.out.println("Back button clicked");
         ScheduleHawkApplication.changeScene(event, "dashboard-view");
@@ -159,7 +158,7 @@ public class EditAppointmentController {
         last_update_hour.getSelectionModel().selectFirst();
 
         ObservableList<String> minutes = FXCollections.observableArrayList();
-        for (int i = 0; i <= 60; i++) {
+        for (int i = 0; i < 60; i++) {
             if (i < 10) {
                 minutes.add("0" + i);
             } else {
@@ -200,7 +199,7 @@ public class EditAppointmentController {
 
     private void setEditUserFields(String appointmentId) throws Exception {
         Appointment appointment = createAppointmentFromDB(appointmentId);
-
+        submit_button.setText("Update");
         appointment_id.setText(appointment.getId());
         title.setText(appointment.getTitle());
         description.setText(appointment.getDescription());
