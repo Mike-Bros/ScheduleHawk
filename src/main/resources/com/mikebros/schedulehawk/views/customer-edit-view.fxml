@@ -25,32 +25,32 @@
       <TextField fx:id="customer_id" editable="false" layoutX="159.0" layoutY="71.0" prefHeight="29.0" prefWidth="104.0" />
       <Text layoutX="159.0" layoutY="143.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Customer Name" wrappingWidth="161.716796875" />
       <TextField fx:id="customer_name" layoutX="159.0" layoutY="154.0" />
+      <Text layoutX="349.0" layoutY="139.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Phone" wrappingWidth="161.716796875" />
+      <TextField fx:id="phone" layoutX="349.0" layoutY="155.0" />
       <Text layoutX="159.0" layoutY="213.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Address" wrappingWidth="161.0" />
       <TextField fx:id="address" layoutX="159.0" layoutY="219.0" prefWidth="161.0" />
       <Text layoutX="349.0" layoutY="210.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Postal Code" wrappingWidth="161.716796875" />
       <TextField fx:id="postal_code" layoutX="349.0" layoutY="219.0" />
-      <Text layoutX="349.0" layoutY="139.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Phone" wrappingWidth="161.716796875" />
-      <TextField fx:id="phone" layoutX="349.0" layoutY="155.0" />
-      <Text layoutX="159.0" layoutY="278.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create Date" wrappingWidth="103.716796875" />
-      <DatePicker fx:id="create_date_date" editable="false" layoutX="159.0" layoutY="292.0" prefHeight="29.0" prefWidth="104.0" promptText="date" />
-      <ComboBox fx:id="create_date_hour" layoutX="280.0" layoutY="292.0" prefHeight="29.0" prefWidth="78.0" promptText="hour" />
-      <ComboBox fx:id="create_date_min" layoutX="368.0" layoutY="291.0" prefHeight="29.0" prefWidth="78.0" promptText="min" />
-      <Text layoutX="159.0" layoutY="362.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Last Update" wrappingWidth="103.716796875" />
-      <DatePicker fx:id="last_update_date" editable="false" layoutX="159.0" layoutY="375.0" prefHeight="29.0" prefWidth="104.0" promptText="date" />
-      <ComboBox fx:id="last_update_min" layoutX="368.0" layoutY="374.0" prefHeight="29.0" prefWidth="78.0" promptText="min" />
-      <ComboBox fx:id="last_update_hour" layoutX="280.0" layoutY="374.0" prefHeight="29.0" prefWidth="78.0" promptText="hour" />
-      <Text layoutX="479.0" layoutY="280.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Created By" wrappingWidth="161.716796875" />
-      <TextField fx:id="created_by" layoutX="479.0" layoutY="291.0" />
-      <Text layoutX="479.0" layoutY="363.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Last Updated By" wrappingWidth="161.716796875" />
-      <TextField fx:id="last_updated_by" layoutX="479.0" layoutY="374.0" />
-      <Text layoutX="726.0" layoutY="210.0" strokeType="OUTSIDE" strokeWidth="0.0" text="First-Level Division" wrappingWidth="161.0" />
-      <ComboBox fx:id="first_level_division" layoutX="726.0" layoutY="219.0" prefHeight="29.0" prefWidth="161.0" />
-      <Button fx:id="submit_button" layoutX="50.0" layoutY="415.0" mnemonicParsing="false" onAction="#submitButtonClicked" />
-      <Text layoutX="282.0" layoutY="278.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hour" wrappingWidth="78.0" />
-      <Text layoutX="280.0" layoutY="362.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hour" wrappingWidth="78.0" />
-      <Text layoutX="368.0" layoutY="279.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Min" wrappingWidth="78.0" />
-      <Text layoutX="368.0" layoutY="362.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Min" wrappingWidth="78.0" />
       <Text layoutX="537.0" layoutY="208.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Country" wrappingWidth="161.0" />
       <ComboBox fx:id="country" layoutX="537.0" layoutY="219.0" onAction="#onCountrySelect" prefHeight="29.0" prefWidth="161.0" />
+      <Text layoutX="726.0" layoutY="210.0" strokeType="OUTSIDE" strokeWidth="0.0" text="First-Level Division" wrappingWidth="161.0" />
+      <ComboBox fx:id="first_level_division" layoutX="726.0" layoutY="219.0" prefHeight="29.0" prefWidth="161.0" />
+      <Text layoutX="159.0" layoutY="278.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create Date" wrappingWidth="103.716796875" />
+      <DatePicker fx:id="create_date_date" editable="false" layoutX="159.0" layoutY="292.0" prefHeight="29.0" prefWidth="104.0" promptText="date" />
+      <Text layoutX="282.0" layoutY="278.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hour" wrappingWidth="78.0" />
+      <ComboBox fx:id="create_date_hour" layoutX="280.0" layoutY="292.0" prefHeight="29.0" prefWidth="78.0" promptText="hour" />
+      <Text layoutX="368.0" layoutY="279.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Min" wrappingWidth="78.0" />
+      <ComboBox fx:id="create_date_min" layoutX="368.0" layoutY="291.0" prefHeight="29.0" prefWidth="78.0" promptText="min" />
+      <Text layoutX="479.0" layoutY="280.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Created By" wrappingWidth="161.716796875" />
+      <TextField fx:id="created_by" layoutX="479.0" layoutY="291.0" />
+      <Text layoutX="159.0" layoutY="362.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Last Update" wrappingWidth="103.716796875" />
+      <DatePicker fx:id="last_update_date" editable="false" layoutX="159.0" layoutY="375.0" prefHeight="29.0" prefWidth="104.0" promptText="date" />
+      <Text layoutX="280.0" layoutY="362.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hour" wrappingWidth="78.0" />
+      <ComboBox fx:id="last_update_hour" layoutX="280.0" layoutY="374.0" prefHeight="29.0" prefWidth="78.0" promptText="hour" />
+      <Text layoutX="368.0" layoutY="362.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Min" wrappingWidth="78.0" />
+      <ComboBox fx:id="last_update_min" layoutX="368.0" layoutY="374.0" prefHeight="29.0" prefWidth="78.0" promptText="min" />
+      <Text layoutX="479.0" layoutY="363.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Last Updated By" wrappingWidth="161.716796875" />
+      <TextField fx:id="last_updated_by" layoutX="479.0" layoutY="374.0" />
+      <Button fx:id="submit_button" layoutX="50.0" layoutY="415.0" mnemonicParsing="false" onAction="#submitButtonClicked" />
    </children>
 </Pane>

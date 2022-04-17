@@ -2,9 +2,7 @@ package com.mikebros.schedulehawk.controller;
 
 import com.mikebros.schedulehawk.DBConnection;
 import com.mikebros.schedulehawk.ScheduleHawkApplication;
-import com.mikebros.schedulehawk.models.Country;
-import com.mikebros.schedulehawk.models.FirstLevelDivision;
-import com.mikebros.schedulehawk.models.User;
+import com.mikebros.schedulehawk.models.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,6 +14,7 @@ import javafx.scene.text.Text;
 import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class EditCustomerController {
@@ -149,7 +148,7 @@ public class EditCustomerController {
         ResultSet countries = DBConnection.query(query);
         ObservableList<String> countryList = FXCollections.observableArrayList();
 
-        while (countries.next()){
+        while (countries.next()) {
             Country country = new Country();
             country.setCountry(countries.getString("Country"));
             countryList.add(country.getCountry());
@@ -161,9 +160,9 @@ public class EditCustomerController {
         String query = "SELECT * FROM countries WHERE country = \"" + name + "\"";
         ResultSet countries = DBConnection.query(query);
 
-        if (countries.next()){
+        if (countries.next()) {
             return countries.getString("Country_ID");
-        }else {
+        } else {
             return "null";
         }
     }
@@ -173,7 +172,7 @@ public class EditCustomerController {
         ResultSet firstLevelDivisions = DBConnection.query(query);
         ObservableList<String> firstLevelDivisionList = FXCollections.observableArrayList();
 
-        while (firstLevelDivisions.next()){
+        while (firstLevelDivisions.next()) {
             FirstLevelDivision firstLevelDivision = new FirstLevelDivision();
             firstLevelDivision.setDivision(firstLevelDivisions.getString("Division"));
             firstLevelDivisionList.add(firstLevelDivision.getDivision());
@@ -186,13 +185,84 @@ public class EditCustomerController {
         ScheduleHawkApplication.changeScene(event, "dashboard-view");
     }
 
-    public void submitButtonClicked(ActionEvent event) {
-        err_message_label.setText("");
-    }
-
     public void onCountrySelect(ActionEvent event) throws Exception {
         System.out.println("Selected: " + country.getValue());
         String countryID = getCountryIDByName(country.getValue());
         first_level_division.setItems(getFirstLevelDivisonsFromDB(countryID));
+    }
+
+    public void submitButtonClicked(ActionEvent event) throws Exception {
+        err_message_label.setText("");
+        if (Objects.equals(customer_name.getText(), "")) {
+            System.out.println("Customer name cannot be empty");
+            err_message_label.setText("Customer name cannot be empty");
+        } else if (Objects.equals(phone.getText(), "")) {
+            System.out.println("Phone cannot be empty");
+            err_message_label.setText("Phone cannot be empty");
+        } else if (Objects.equals(address.getText(), "")) {
+            System.out.println("Address cannot be empty");
+            err_message_label.setText("Address cannot be empty");
+        } else if (Objects.equals(postal_code.getText(), "")) {
+            System.out.println("Postal Code cannot be empty");
+            err_message_label.setText("Postal Code cannot be empty");
+        } else if (country.getValue() == null) {
+            System.out.println("Country cannot be empty");
+            err_message_label.setText("Country cannot be empty");
+        } else if (first_level_division.getValue() == null) {
+            System.out.println("First-Level Division cannot be empty");
+            err_message_label.setText("First-Level Division cannot be empty");
+        } else {
+            if (Objects.equals(userData, "new")) {
+                System.out.println("Creating new customer");
+
+                Customer customer = createCustomer();
+                customer.create();
+                //Appointment appt = createAppointment();
+                //appt.create();
+
+                ScheduleHawkApplication.changeScene(event, "dashboard-view");
+            } else {
+                System.out.println("Updating existing customer");
+
+                //Appointment appt = createAppointment();
+                //appt.update();
+
+                ScheduleHawkApplication.changeScene(event, "dashboard-view");
+            }
+        }
+    }
+
+    private Customer createCustomer() throws Exception {
+        Customer cust = new Customer();
+
+        cust.setId(customer_id.getText());
+        cust.setName(customer_name.getText());
+        cust.setPhone(phone.getText());
+        cust.setAddress(address.getText());
+        cust.setPostalCode(postal_code.getText());
+        cust.setDivisionID(getFirstLevelDivisionID(first_level_division.getValue()));
+
+        cust.setCreateDate(getDateTimeString(create_date_date, create_date_hour, create_date_min));
+        cust.setCreatedBy(created_by.getText());
+        cust.setLastUpdate(getDateTimeString(last_update_date, last_update_hour, last_update_min));
+        cust.setLastUpdatedBy(last_updated_by.getText());
+
+        return cust;
+    }
+
+    private String getFirstLevelDivisionID(String division) throws Exception {
+        String query = "SELECT * FROM first_level_divisions WHERE Division = \"" + division + "\"";
+        ResultSet divisions = DBConnection.query(query);
+        if (divisions.next()){
+            return divisions.getString("Division_ID");
+        }else{
+            throw new Exception("No division found in the DB with the division name: " + division);
+        }
+    }
+
+    private String getDateTimeString(DatePicker datePicker, ComboBox<String> start_hour, ComboBox<String> start_min) {
+        String date = datePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String time = start_hour.getValue() + ":" + start_min.getValue() + ":00";
+        return date + " " + time;
     }
 }
