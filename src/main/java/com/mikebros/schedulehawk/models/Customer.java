@@ -149,5 +149,22 @@ public class Customer {
         System.out.println(query);
         DBConnection.update(query);
     }
+
+    public void update() throws Exception {
+        convertDatesToUTC();
+        String query = "UPDATE customers " +
+                "SET Customer_Name = '" + this.name + "', " +
+                "Address = '" + this.address + "', " +
+                "Postal_Code = '" + this.postalCode + "', " +
+                "Phone = '" + this.phone + "', " +
+                "Create_Date = '" + this.createDate + "', " +
+                "Created_By = '" + this.createdBy + "', " +
+                "Last_Update = '" + this.lastUpdate + "', " +
+                "Last_Updated_by = '" + this.lastUpdatedBy + "', " +
+                "Division_ID = '" + this.divisionID + "' " +
+                "WHERE Customer_ID = " + this.id + ";";
+        System.out.println(query);
+        DBConnection.update(query);
+    }
 }
 

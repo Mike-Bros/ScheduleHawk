@@ -14,6 +14,8 @@ import javafx.scene.text.Text;
 import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
@@ -108,9 +110,71 @@ public class EditCustomerController {
         last_update_min.setValue(localMin);
     }
 
-    private void setEditCustomerFields(String userData) {
+    private void setEditCustomerFields(String customerID) throws Exception {
+        Customer customer = createCustomerFromDB(customerID);
         submit_button.setText("Update");
 
+        customer_id.setText(customer.getId());
+        customer_name.setText(customer.getName());
+        phone.setText(customer.getPhone());
+        address.setText(customer.getAddress());
+        postal_code.setText(customer.getPostalCode());
+
+        country.setValue(getCountryNameByDivisionID(customer.getDivisionID()));
+        onCountrySelect();
+        first_level_division.setValue(getFirstLevelDivisionName(customer.getDivisionID()));
+
+        create_date_date.setValue(getLocalDate(customer.getCreateDate()));
+        create_date_hour.setValue(getHour(customer.getCreateDate()));
+        create_date_min.setValue(getMinutes(customer.getCreateDate()));
+
+        last_update_date.setValue(getLocalDate(customer.getLastUpdate()));
+        last_update_hour.setValue(getHour(customer.getLastUpdate()));
+        last_update_min.setValue(getMinutes(customer.getLastUpdate()));
+
+        created_by.setText(customer.getCreatedBy());
+        last_updated_by.setText(customer.getLastUpdatedBy());
+    }
+
+    private String getFirstLevelDivisionName(String divisionID) throws Exception {
+        String query = "SELECT * FROM first_level_divisions WHERE Division_ID = " + divisionID;
+        ResultSet firstLevelDivision = DBConnection.query(query);
+        firstLevelDivision.next();
+        return firstLevelDivision.getString("Division");
+    }
+
+    private String getCountryNameByDivisionID(String divisionID) throws Exception {
+        String query = "SELECT * FROM first_level_divisions WHERE Division_ID = " + divisionID;
+        ResultSet firstLevelDivision = DBConnection.query(query);
+        firstLevelDivision.next();
+        String countryID = firstLevelDivision.getString("COUNTRY_ID");
+
+        query = "SELECT * FROM countries WHERE Country_ID = " + countryID;
+        ResultSet country = DBConnection.query(query);
+        country.next();
+        return country.getString("Country");
+    }
+
+    private Customer createCustomerFromDB(String customerID) throws Exception {
+        String query = "SELECT * FROM customers WHERE Customer_ID = " + customerID + ";";
+        ResultSet customer = DBConnection.query(query);
+
+        Customer cust = new Customer();
+        customer.next();
+
+        cust.setId(customer.getString("Customer_ID"));
+        cust.setName(customer.getString("Customer_Name"));
+        cust.setPhone(customer.getString("Phone"));
+        cust.setAddress(customer.getString("Address"));
+        cust.setPostalCode(customer.getString("Postal_Code"));
+        cust.setDivisionID(customer.getString("Division_ID"));
+
+        cust.setCreateDate(convertFromUTC(customer.getString("Create_Date")));
+        cust.setCreatedBy(customer.getString("Created_By"));
+        cust.setLastUpdate(convertFromUTC(customer.getString("Last_Update")));
+        cust.setLastUpdatedBy(customer.getString("Last_Updated_By"));
+
+        return cust;
     }
 
     private void setComboBoxes() throws Exception {
@@ -167,7 +231,7 @@ public class EditCustomerController {
         }
     }
 
-    private ObservableList<String> getFirstLevelDivisonsFromDB(String countryID) throws Exception {
+    private ObservableList<String> getFirstLevelDivisionsFromDB(String countryID) throws Exception {
         String query = "SELECT * FROM first_level_divisions WHERE COUNTRY_ID = " + countryID;
         ResultSet firstLevelDivisions = DBConnection.query(query);
         ObservableList<String> firstLevelDivisionList = FXCollections.observableArrayList();
@@ -185,10 +249,10 @@ public class EditCustomerController {
         ScheduleHawkApplication.changeScene(event, "dashboard-view");
     }
 
-    public void onCountrySelect(ActionEvent event) throws Exception {
+    public void onCountrySelect() throws Exception {
         System.out.println("Selected: " + country.getValue());
         String countryID = getCountryIDByName(country.getValue());
-        first_level_division.setItems(getFirstLevelDivisonsFromDB(countryID));
+        first_level_division.setItems(getFirstLevelDivisionsFromDB(countryID));
     }
 
     public void submitButtonClicked(ActionEvent event) throws Exception {
@@ -217,13 +281,13 @@ public class EditCustomerController {
 
                 Customer customer = createCustomer();
                 customer.create();
-                //Appointment appt = createAppointment();
-                //appt.create();
 
                 ScheduleHawkApplication.changeScene(event, "dashboard-view");
             } else {
                 System.out.println("Updating existing customer");
 
+                Customer customer = createCustomer();
+                customer.update();
                 //Appointment appt = createAppointment();
                 //appt.update();
 
@@ -260,9 +324,37 @@ public class EditCustomerController {
         }
     }
 
+    private LocalDate getLocalDate(String dateTime) {
+        String[] arrStr = dateTime.split(" ");
+        return LocalDate.parse(arrStr[0]);
+    }
+
+    private String getHour(String dateTime) {
+        String[] arrStr = dateTime.split(" ");
+        arrStr = arrStr[1].split(":");
+        return arrStr[0];
+    }
+
+    private String getMinutes(String dateTime) {
+        String[] arrStr = dateTime.split(" ");
+        arrStr = arrStr[1].split(":");
+        return arrStr[1];
+    }
+
     private String getDateTimeString(DatePicker datePicker, ComboBox<String> start_hour, ComboBox<String> start_min) {
         String date = datePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         String time = start_hour.getValue() + ":" + start_min.getValue() + ":00";
         return date + " " + time;
+    }
+
+    private String convertFromUTC(String dt) {
+        LocalDate localDate = LocalDate.parse(dt.split(" ")[0]);
+        LocalTime localTime = LocalTime.parse(dt.split(" ")[1]);
+        ZonedDateTime zonedDateTime = ZonedDateTime.of(localDate, localTime, ZoneId.of("UTC"));
+
+        dt = zonedDateTime.withZoneSameInstant(ZoneId.systemDefault()).toString();
+        dt = dt.substring(0,16); // removes zone info
+        dt = dt.replace("T", " ");
+        return dt;
     }
 }
