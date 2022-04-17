@@ -133,7 +133,7 @@ public class DashboardController {
      * @return the observable list of Appointment object(s)
      * @throws SQLException the sql exception
      */
-    private ObservableList<Appointment> createAppointments(ResultSet appointments) throws SQLException {
+    private ObservableList<Appointment> createAppointments(ResultSet appointments) throws Exception {
         ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
 
         while (appointments.next()) {
@@ -161,7 +161,7 @@ public class DashboardController {
             appt.set_lastUpdatedBy(appointments.getString("Last_Updated_By"));
             appt.set_customerID(appointments.getString("Customer_ID"));
             appt.set_userID(appointments.getString("User_ID"));
-            appt.set_contactID(appointments.getString("Contact_ID"));
+            appt.set_contactID(getContact(appointments.getString("Contact_ID")));
             appt.set_editButton(editButton);
             appt.set_deleteButton(deleteButton);
             appointmentList.add(appt);
@@ -404,5 +404,12 @@ public class DashboardController {
         ResultSet country = DBConnection.query(query);
         country.next();
         return country.getString("Country");
+    }
+
+    private String getContact(String contactID) throws Exception {
+        String query = "SELECT * FROM contacts WHERE Contact_ID = " + contactID;
+        ResultSet contact = DBConnection.query(query);
+        contact.next();
+        return contact.getString("Contact_Name");
     }
 }

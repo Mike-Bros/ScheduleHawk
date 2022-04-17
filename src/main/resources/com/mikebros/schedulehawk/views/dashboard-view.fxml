@@ -24,7 +24,7 @@
                   <TableColumn fx:id="type" text="Type" />
                   <TableColumn fx:id="location_col" text="Location" />
                   <TableColumn fx:id="customerID" text="Customer_ID" />
-                  <TableColumn fx:id="contactID" text="Contact_ID" />
+                  <TableColumn fx:id="contactID" text="Contact" />
                   <TableColumn fx:id="userID" text="User_ID" />
                   <TableColumn fx:id="apptCreateDate" text="Create_Date" />
                   <TableColumn fx:id="apptCreatedBy" text="Created_By" />
