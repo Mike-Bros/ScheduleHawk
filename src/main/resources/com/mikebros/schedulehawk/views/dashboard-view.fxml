@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.Pane?>
-
 
 <ScrollPane prefHeight="1080.0" prefWidth="1720.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mikebros.schedulehawk.controller.DashboardController">
    <content>
@@ -16,6 +16,7 @@
             <Button fx:id="createAppointment" layoutX="50.0" layoutY="87.0" mnemonicParsing="false" onAction="#createNewAppointmentButtonClicked" text="Create New Appointment" />
             <TableView fx:id="appointmentTable" layoutX="50.0" layoutY="124.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="444.0" prefWidth="1620.0">
                <columns>
+                  <TableColumn fx:id="appointmentID" text="Appointment_ID" />
                   <TableColumn fx:id="start" text="Start" />
                   <TableColumn fx:id="end" text="End" />
                   <TableColumn fx:id="title" text="Title" />
@@ -36,9 +37,12 @@
             <Button fx:id="createCustomer" layoutX="50.0" layoutY="590.0" mnemonicParsing="false" onAction="#createNewCustomerButtonClicked" text="Create New Customer" />
             <TableView fx:id="customerTable" layoutX="50.0" layoutY="633.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="330.0" prefWidth="1620.0">
                <columns>
+                  <TableColumn fx:id="customerCustomerID" text="Customer_ID" />
                   <TableColumn fx:id="customerName" text="Customer Name" />
                   <TableColumn fx:id="address" text="Address" />
                   <TableColumn fx:id="postalCode" text="Postal Code" />
+                  <TableColumn fx:id="division" text="Division" />
+                  <TableColumn fx:id="country" text="Country" />
                   <TableColumn fx:id="phone" text="Phone" />
                   <TableColumn fx:id="customerCreateDate" text="Create Date" />
                   <TableColumn fx:id="customerCreatedBy" text="Created_By" />

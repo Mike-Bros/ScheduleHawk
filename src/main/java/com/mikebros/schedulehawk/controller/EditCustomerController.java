@@ -24,8 +24,6 @@ public class EditCustomerController {
     private String userData;
 
     @FXML
-    private Text err_message_text;
-    @FXML
     private TextField address;
     @FXML
     private Label err_message_label;
@@ -288,8 +286,6 @@ public class EditCustomerController {
 
                 Customer customer = createCustomer();
                 customer.update();
-                //Appointment appt = createAppointment();
-                //appt.update();
 
                 ScheduleHawkApplication.changeScene(event, "dashboard-view");
             }

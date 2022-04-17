@@ -19,6 +19,7 @@ public class Customer {
     private String lastUpdate;
     private String lastUpdatedBy;
     private String divisionID;
+    private String country;
     private Button editButton;
     private Button deleteButton;
 
@@ -63,6 +64,10 @@ public class Customer {
 
     public void setDivisionID(String divisionID) {
         this.divisionID = divisionID;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public void setEditButton(Button editButton) {
@@ -111,6 +116,10 @@ public class Customer {
 
     public String getDivisionID() {
         return divisionID;
+    }
+
+    public String getCountry() {
+        return country;
     }
 
     public Button getEditButton() {
