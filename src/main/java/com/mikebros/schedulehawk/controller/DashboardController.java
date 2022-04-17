@@ -245,7 +245,7 @@ public class DashboardController{
     }
 
     private void deleteAppointment(String id){
-        System.out.println("Deleting: " + id);
+        System.out.println("Deleting appointment: " + id);
         String query = "DELETE FROM appointments WHERE Appointment_ID = " + id + ";";
         try {
             DBConnection.update(query);
@@ -271,8 +271,19 @@ public class DashboardController{
     }
 
     private void deleteCustomer(String id){
-        System.out.println("Deleting: " + id);
-        String query = "DELETE FROM customers WHERE Customer_ID = " + id + ";";
+        System.out.println("Finding and delete appointments for customer: " + id);
+        String query = "SELECT * FROM appointments WHERE Customer_ID = " + id;
+        try {
+            ResultSet appointments = DBConnection.query(query);
+            while (appointments.next()){
+                deleteAppointment(appointments.getString("Appointment_ID"));
+            }
+        } catch (Exception e) {
+            System.out.println("Error occurred, unable to delete appointment");
+        }
+
+        System.out.println("Deleting Customer: " + id);
+        query = "DELETE FROM customers WHERE Customer_ID = " + id + ";";
         try {
             DBConnection.update(query);
         }catch (Exception e){
