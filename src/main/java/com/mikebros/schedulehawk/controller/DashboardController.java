@@ -35,7 +35,13 @@ public class DashboardController {
     @FXML
     private TableColumn<Appointment, String> appointmentID;
     @FXML
-    private TableColumn<Appointment, String> start;
+    private TableColumn<Appointment, String> startDate;
+    @FXML
+    private TableColumn<Appointment, String> startTime;
+    @FXML
+    private TableColumn<Appointment, String> endDate;
+    @FXML
+    private TableColumn<Appointment, String> endTime;
     @FXML
     private TableColumn<Appointment, String> title;
     @FXML
@@ -54,8 +60,6 @@ public class DashboardController {
     private TableColumn<Appointment, String> apptLastUpdatedBy;
     @FXML
     private TableColumn<Appointment, String> customerID;
-    @FXML
-    private TableColumn<Appointment, String> end;
     @FXML
     private TableColumn<Appointment, String> apptCreateDate;
     @FXML
@@ -209,8 +213,10 @@ public class DashboardController {
      */
     private void addApptRows(ObservableList<Appointment> appointmentList) {
         appointmentID.setCellValueFactory(new PropertyValueFactory<>("id"));
-        start.setCellValueFactory(new PropertyValueFactory<>("start"));
-        end.setCellValueFactory(new PropertyValueFactory<>("end"));
+        startDate.setCellValueFactory(new PropertyValueFactory<>("startDate"));
+        startTime.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+        endDate.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+        endTime.setCellValueFactory(new PropertyValueFactory<>("endTime"));
         title.setCellValueFactory(new PropertyValueFactory<>("title"));
         description.setCellValueFactory(new PropertyValueFactory<>("description"));
         type.setCellValueFactory(new PropertyValueFactory<>("type"));
@@ -239,8 +245,8 @@ public class DashboardController {
         customerCreatedBy.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
         customerLastUpdate.setCellValueFactory(new PropertyValueFactory<>("lastUpdate"));
         customerLastUpdatedBy.setCellValueFactory(new PropertyValueFactory<>("lastUpdatedBy"));
-        customerDelete.setCellValueFactory(new PropertyValueFactory<>("editButton"));
-        customerEdit.setCellValueFactory(new PropertyValueFactory<>("deleteButton"));
+        customerDelete.setCellValueFactory(new PropertyValueFactory<>("deleteButton"));
+        customerEdit.setCellValueFactory(new PropertyValueFactory<>("editButton"));
 
         customerTable.setItems(customerList);
     }
@@ -271,7 +277,7 @@ public class DashboardController {
         alert.get().getDialogPane().getButtonTypes().add(cancelButtonType);
         alert.get().showAndWait().ifPresent(type -> {
             if (type == cancelButtonType) {
-                System.out.println("yoot");
+                System.out.println("User has canceled the deletion");
             } else {
                 System.out.println("Deleting appointment: " + id);
                 String query = "DELETE FROM appointments WHERE Appointment_ID = " + id + ";";
@@ -294,7 +300,6 @@ public class DashboardController {
     private void editCustomerButtonClicked(ActionEvent event) {
         Node node = (Node) event.getSource();
         System.out.println("Clicked on the edit button for customer: " + node.getUserData());
-        System.out.println(event);
         //Change scene to the appointment-edit-view where Appointment_ID = buttonId
         ScheduleHawkApplication.changeScene(event, "customer-edit-view");
     }
@@ -302,7 +307,6 @@ public class DashboardController {
     private void deleteCustomerButtonClicked(ActionEvent event) {
         Node node = (Node) event.getSource();
         System.out.println("Clicked on the delete button for customer: " + node.getUserData());
-        System.out.println(event);
         deleteCustomer((String) node.getUserData());
         ScheduleHawkApplication.changeScene(event, "dashboard-view");
     }
@@ -316,7 +320,7 @@ public class DashboardController {
         alert.get().getDialogPane().getButtonTypes().add(cancelButtonType);
         alert.get().showAndWait().ifPresent(type -> {
             if (type == cancelButtonType) {
-                System.out.println("yoot");
+                System.out.println("User has canceled the deletion");
             } else {
                 System.out.println("Finding and delete appointments for customer: " + id);
                 String query = "SELECT * FROM appointments WHERE Customer_ID = " + id;

@@ -15,7 +15,11 @@ public class Appointment {
     private String location;
     private String type;
     private String start;
+    private String startDate;
+    private String startTime;
     private String end;
+    private String endDate;
+    private String endTime;
     private String createDate;
     private String createdBy;
     private String lastUpdate;
@@ -84,6 +88,8 @@ public class Appointment {
      */
     public void set_start(String start) {
         this.start = start;
+        this.startDate = start.split(" ")[0];
+        this.startTime = start.split(" ")[1];
     }
 
     /**
@@ -93,6 +99,8 @@ public class Appointment {
      */
     public void set_end(String end) {
         this.end = end;
+        this.endDate = end.split(" ")[0];
+        this.endTime = end.split(" ")[1];
     }
 
     /**
@@ -226,6 +234,14 @@ public class Appointment {
         return this.start;
     }
 
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
     /**
      * Get end string.
      *
@@ -233,6 +249,14 @@ public class Appointment {
      */
     public String getEnd() {
         return this.end;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public String getEndTime() {
+        return endTime;
     }
 
     /**

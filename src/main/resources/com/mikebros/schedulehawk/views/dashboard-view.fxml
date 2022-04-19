@@ -17,8 +17,10 @@
             <TableView fx:id="appointmentTable" layoutX="50.0" layoutY="124.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="444.0" prefWidth="1620.0">
                <columns>
                   <TableColumn fx:id="appointmentID" text="Appointment_ID" />
-                  <TableColumn fx:id="start" text="Start" />
-                  <TableColumn fx:id="end" text="End" />
+                  <TableColumn fx:id="startDate" text="Start Date" />
+                  <TableColumn fx:id="startTime" text="Start Time" />
+                  <TableColumn fx:id="endDate" text="End Date" />
+                  <TableColumn fx:id="endTime" text="End Time" />
                   <TableColumn fx:id="title" text="Title" />
                   <TableColumn fx:id="description" text="Description" />
                   <TableColumn fx:id="type" text="Type" />
@@ -48,8 +50,8 @@
                   <TableColumn fx:id="customerCreatedBy" text="Created_By" />
                   <TableColumn fx:id="customerLastUpdate" text="Last_Update" />
                   <TableColumn fx:id="customerLastUpdatedBy" text="Last_Updated_By" />
-                  <TableColumn fx:id="customerDelete" text="Delete" />
                   <TableColumn fx:id="customerEdit" text="Edit" />
+                  <TableColumn fx:id="customerDelete" text="Delete" />
                </columns>
             </TableView>
          </children>
