@@ -125,6 +125,22 @@ public class DashboardController {
         return DBConnection.query(query);
     }
 
+    private String getAppointmentType(String id){
+        try {
+            String query = "SELECT * FROM appointments WHERE Appointment_ID = " + id;
+            ResultSet apptResult = DBConnection.query(query);
+            if(apptResult.next()) {
+                return apptResult.getString("Type");
+            }else{
+                return "Unknown Type";
+            }
+        }catch (Exception e){
+            System.out.println("There was an issue retrieving appointment type from DB");
+            System.out.println(e.getMessage());
+        }
+        return "Unknown Type";
+    }
+
     private ResultSet getAllCustomers() throws Exception {
         String query = "SELECT * FROM customers;";
         return DBConnection.query(query);
@@ -270,7 +286,7 @@ public class DashboardController {
 
     private void deleteAppointment(String id) {
         AtomicReference<Alert> alert = new AtomicReference<>(new Alert(Alert.AlertType.WARNING));
-        alert.get().setContentText("Are you sure you want to delete appointment: " + id + "?");
+        alert.get().setContentText("Are you sure you want to delete...\nAppointment ID: " + id + "\nAppointment Type: " + getAppointmentType(id));
         alert.get().setTitle("Delete Appointment");
         alert.get().setHeaderText(null);
         ButtonType cancelButtonType = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
