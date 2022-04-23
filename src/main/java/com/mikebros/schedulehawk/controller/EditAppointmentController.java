@@ -13,9 +13,11 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 
 import java.sql.ResultSet;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
+import java.util.*;
 
 public class EditAppointmentController {
 
@@ -119,6 +121,9 @@ public class EditAppointmentController {
                 || Objects.equals(user_id.getText(), "")) {
             System.out.println("ID fields cannot be null");
             err_message_label.setText("Neither Customer or User ID can be empty");
+        } else if (!apptIsWithinBusinessHours()) {
+            System.out.println("Appointments cannot be scheduled outside of business hours");
+            err_message_label.setText("Appointments cannot be scheduled outside of business hours (8:00 a.m. to 10:00 p.m. EST Mon-Fri)");
         } else {
             if (Objects.equals(userData, "new")) {
                 System.out.println("Creating new appointment");
@@ -134,6 +139,37 @@ public class EditAppointmentController {
         }
     }
 
+    private boolean apptIsWithinBusinessHours() throws ParseException {
+        Calendar apptCal = Calendar.getInstance();
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        Date localDate = formatter.parse(convertLocalToEST(getDateTimeString(start_date, start_hour, start_min)));
+        apptCal.setTime(localDate);
+        System.out.println(apptCal.get(Calendar.DAY_OF_WEEK));
+        if (apptCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || apptCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY){
+            System.out.println("Not within Business Hours");
+            return false;
+        }
+        localDate = formatter.parse(convertLocalToEST(getDateTimeString(end_date, end_hour, end_min)));
+        apptCal.setTime(localDate);
+        System.out.println(apptCal.get(Calendar.DAY_OF_WEEK));
+        if (apptCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || apptCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY){
+            System.out.println("Not within Business Hours");
+            return false;
+        }
+
+        int estStart = Integer.parseInt(getHour(convertLocalToEST(getDateTimeString(start_date, start_hour, start_min))));
+        int estEnd = Integer.parseInt(getHour(convertLocalToEST(getDateTimeString(end_date, end_hour, end_min))));
+
+        if (estStart >= 8 && estStart <= 22 && estEnd >= 8 && estEnd <= 22){
+            System.out.println("Within Business Hours");
+            return true;
+        }else{
+            System.out.println("Not within Business Hours");
+            return false;
+        }
+    }
+
     public void backButtonClicked(ActionEvent event) {
         System.out.println("Back button clicked");
         ScheduleHawkApplication.changeScene(event, "dashboard-view");
@@ -141,7 +177,7 @@ public class EditAppointmentController {
 
     private void setComboBoxes() throws Exception {
         ObservableList<String> hours = FXCollections.observableArrayList();
-        for (int i = 1; i <= 24; i++) {
+        for (int i = 0; i <= 23; i++) {
             if (i < 10) {
                 hours.add("0" + i);
             } else {
@@ -158,7 +194,7 @@ public class EditAppointmentController {
         last_update_hour.getSelectionModel().selectFirst();
 
         ObservableList<String> minutes = FXCollections.observableArrayList();
-        for (int i = 0; i < 60; i++) {
+        for (int i = 0; i <= 59; i++) {
             if (i < 10) {
                 minutes.add("0" + i);
             } else {
@@ -332,6 +368,17 @@ public class EditAppointmentController {
         ZonedDateTime zonedDateTime = ZonedDateTime.of(localDate, localTime, ZoneId.of("UTC"));
 
         dt = zonedDateTime.withZoneSameInstant(ZoneId.systemDefault()).toString();
+        dt = dt.substring(0,16); // removes zone info
+        dt = dt.replace("T", " ");
+        return dt;
+    }
+
+    private String convertLocalToEST(String dt){
+        LocalDate localDate = LocalDate.parse(dt.split(" ")[0]);
+        LocalTime localTime = LocalTime.parse(dt.split(" ")[1]);
+        ZonedDateTime zonedDateTime = ZonedDateTime.of(localDate, localTime, ZoneId.of(ZoneId.systemDefault().toString()));
+
+        dt = String.valueOf(zonedDateTime.withZoneSameInstant(ZoneId.of("US/Eastern")));
         dt = dt.substring(0,16); // removes zone info
         dt = dt.replace("T", " ");
         return dt;
