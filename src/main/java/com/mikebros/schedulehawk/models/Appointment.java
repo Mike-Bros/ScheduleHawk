@@ -82,7 +82,7 @@ public class Appointment {
     }
 
     /**
-     * Set start.
+     * Set start and split dateTime into startDate and startTime.
      *
      * @param start the start
      */
@@ -93,7 +93,7 @@ public class Appointment {
     }
 
     /**
-     * Set end.
+     * Set end and split dateTime into endDate and endTime.
      *
      * @param end the end
      */

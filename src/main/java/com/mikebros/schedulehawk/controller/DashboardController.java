@@ -11,19 +11,25 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import org.controlsfx.control.action.Action;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * The type Dashboard controller.
  */
 public class DashboardController {
+    @FXML
+    private ComboBox<String> selectedView;
     @FXML
     private TableView<Appointment> appointmentTable;
     @FXML
@@ -106,12 +112,26 @@ public class DashboardController {
     public void initialize() throws Exception {
         System.out.println("......................................................................................");
         System.out.println("Initializing Dashboard");
+        setView();
         addApptRows(createAppointments(getAllAppointments()));
         addCustomerRows(createCustomers(getAllCustomers()));
         createAppointment.setUserData("new");
         createCustomer.setUserData("new");
         System.out.println("Finished initializing Dashboard");
         System.out.println("......................................................................................\n");
+    }
+
+    private void setView() {
+        ObservableList<String> viewList = FXCollections.observableArrayList();
+        viewList.add("Week");
+        viewList.add("Month");
+        selectedView.setItems(viewList);
+        selectedView.setValue("Month");
+    }
+
+    @FXML
+    private void updateApptTable(ActionEvent event) throws Exception {
+        addApptRows(createAppointments(getAllAppointments()));
     }
 
     /**
@@ -157,34 +177,71 @@ public class DashboardController {
         ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
 
         while (appointments.next()) {
-            Appointment appt = new Appointment();
-            Button editButton = new Button();
-            editButton.setText("edit");
-            editButton.setUserData(appointments.getString("Appointment_ID"));
-            editButton.setOnAction(this::editApptButtonClicked);
+            if (Objects.equals(selectedView.getValue(), "Month")){
+                if (isThisMonth(appointments.getString("Start"))){
+                    System.out.println("month selected creating appointments only within this month");
+                    Appointment appt = new Appointment();
+                    Button editButton = new Button();
+                    editButton.setText("edit");
+                    editButton.setUserData(appointments.getString("Appointment_ID"));
+                    editButton.setOnAction(this::editApptButtonClicked);
 
-            Button deleteButton = new Button();
-            deleteButton.setText("delete");
-            deleteButton.setUserData(appointments.getString("Appointment_ID"));
-            deleteButton.setOnAction(this::deleteApptButtonClicked);
+                    Button deleteButton = new Button();
+                    deleteButton.setText("delete");
+                    deleteButton.setUserData(appointments.getString("Appointment_ID"));
+                    deleteButton.setOnAction(this::deleteApptButtonClicked);
 
-            appt.set_id(appointments.getString("Appointment_ID"));
-            appt.set_title(appointments.getString("Title"));
-            appt.set_description(appointments.getString("Description"));
-            appt.set_location(appointments.getString("Location"));
-            appt.set_type(appointments.getString("Type"));
-            appt.set_start(convertFromUTC(appointments.getString("Start")));
-            appt.set_end(convertFromUTC(appointments.getString("End")));
-            appt.set_createDate(convertFromUTC(appointments.getString("Create_Date")));
-            appt.set_createdBy(appointments.getString("Created_By"));
-            appt.set_lastUpdate(convertFromUTC(appointments.getString("Last_Update")));
-            appt.set_lastUpdatedBy(appointments.getString("Last_Updated_By"));
-            appt.set_customerID(appointments.getString("Customer_ID"));
-            appt.set_userID(appointments.getString("User_ID"));
-            appt.set_contactID(getContact(appointments.getString("Contact_ID")));
-            appt.set_editButton(editButton);
-            appt.set_deleteButton(deleteButton);
-            appointmentList.add(appt);
+                    appt.set_id(appointments.getString("Appointment_ID"));
+                    appt.set_title(appointments.getString("Title"));
+                    appt.set_description(appointments.getString("Description"));
+                    appt.set_location(appointments.getString("Location"));
+                    appt.set_type(appointments.getString("Type"));
+                    appt.set_start(convertFromUTC(appointments.getString("Start")));
+                    appt.set_end(convertFromUTC(appointments.getString("End")));
+                    appt.set_createDate(convertFromUTC(appointments.getString("Create_Date")));
+                    appt.set_createdBy(appointments.getString("Created_By"));
+                    appt.set_lastUpdate(convertFromUTC(appointments.getString("Last_Update")));
+                    appt.set_lastUpdatedBy(appointments.getString("Last_Updated_By"));
+                    appt.set_customerID(appointments.getString("Customer_ID"));
+                    appt.set_userID(appointments.getString("User_ID"));
+                    appt.set_contactID(getContact(appointments.getString("Contact_ID")));
+                    appt.set_editButton(editButton);
+                    appt.set_deleteButton(deleteButton);
+                    appointmentList.add(appt);
+                }
+            }else {
+                if (isThisWeek(appointments.getString("Start"))){
+                    System.out.println("week selected creating appointments only within this week");
+                    Appointment appt = new Appointment();
+                    Button editButton = new Button();
+                    editButton.setText("edit");
+                    editButton.setUserData(appointments.getString("Appointment_ID"));
+                    editButton.setOnAction(this::editApptButtonClicked);
+
+                    Button deleteButton = new Button();
+                    deleteButton.setText("delete");
+                    deleteButton.setUserData(appointments.getString("Appointment_ID"));
+                    deleteButton.setOnAction(this::deleteApptButtonClicked);
+
+                    appt.set_id(appointments.getString("Appointment_ID"));
+                    appt.set_title(appointments.getString("Title"));
+                    appt.set_description(appointments.getString("Description"));
+                    appt.set_location(appointments.getString("Location"));
+                    appt.set_type(appointments.getString("Type"));
+                    appt.set_start(convertFromUTC(appointments.getString("Start")));
+                    appt.set_end(convertFromUTC(appointments.getString("End")));
+                    appt.set_createDate(convertFromUTC(appointments.getString("Create_Date")));
+                    appt.set_createdBy(appointments.getString("Created_By"));
+                    appt.set_lastUpdate(convertFromUTC(appointments.getString("Last_Update")));
+                    appt.set_lastUpdatedBy(appointments.getString("Last_Updated_By"));
+                    appt.set_customerID(appointments.getString("Customer_ID"));
+                    appt.set_userID(appointments.getString("User_ID"));
+                    appt.set_contactID(getContact(appointments.getString("Contact_ID")));
+                    appt.set_editButton(editButton);
+                    appt.set_deleteButton(deleteButton);
+                    appointmentList.add(appt);
+                }
+            }
         }
         return appointmentList;
     }
@@ -394,6 +451,33 @@ public class DashboardController {
 
     private void goAhead() {
         System.out.println("Go ahead");
+    }
+
+    private boolean isThisMonth(String start) {
+        String apptStart = convertFromUTC(start);
+        String apptDate = apptStart.split(" ")[0];
+        String apptYear = apptDate.split("-")[0];
+        String apptMonth = apptDate.split("-")[1];
+
+        int localYear = LocalDate.now().getYear();
+        int localMonth = LocalDate.now().getMonthValue();
+
+        return localMonth == Integer.parseInt(apptMonth) && localYear == Integer.parseInt(apptYear);
+    }
+
+    private boolean isThisWeek(String start) throws ParseException {
+        if (isThisMonth(start)){
+            Calendar localCal = Calendar.getInstance();
+            Calendar apptCal = Calendar.getInstance();
+
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+            Date localDate = formatter.parse(start);
+            apptCal.setTime(localDate);
+
+            return apptCal.get(Calendar.WEEK_OF_YEAR) == localCal.get(Calendar.WEEK_OF_YEAR);
+        }else {
+            return false;
+        }
     }
 
     private String convertFromUTC(String dt) {
