@@ -154,7 +154,6 @@ public class EditAppointmentController {
         }
         localDate = formatter.parse(convertLocalToEST(getDateTimeString(end_date, end_hour, end_min)));
         apptCal.setTime(localDate);
-        System.out.println(apptCal.get(Calendar.DAY_OF_WEEK));
         if (apptCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || apptCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
             return false;
         }
@@ -276,7 +275,6 @@ public class EditAppointmentController {
         create_date_date.setValue(LocalDate.now());
         last_update_date.setValue(LocalDate.now());
 
-        System.out.println(LocalTime.now().toString());
         String[] arrStr = LocalTime.now().toString().split(":");
         String localHour = arrStr[0];
         String localMin = arrStr[1];

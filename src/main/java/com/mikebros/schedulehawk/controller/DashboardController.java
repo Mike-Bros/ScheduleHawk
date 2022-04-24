@@ -11,7 +11,6 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.controlsfx.control.action.Action;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,6 +21,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -102,6 +102,7 @@ public class DashboardController {
     private TableColumn<Customer, String> customerName;
     @FXML
     private TableColumn<Customer, String> phone;
+    private ObservableList<Appointment> upcomingAppointments;
 
 
     /**
@@ -115,6 +116,7 @@ public class DashboardController {
         setView();
         addApptRows(createAppointments(getAllAppointments()));
         addCustomerRows(createCustomers(getAllCustomers()));
+        notifyUpcomingAppointment(createAppointments(getAllAppointments()));
         createAppointment.setUserData("new");
         createCustomer.setUserData("new");
         System.out.println("Finished initializing Dashboard");
@@ -145,16 +147,16 @@ public class DashboardController {
         return DBConnection.query(query);
     }
 
-    private String getAppointmentType(String id){
+    private String getAppointmentType(String id) {
         try {
             String query = "SELECT * FROM appointments WHERE Appointment_ID = " + id;
             ResultSet apptResult = DBConnection.query(query);
-            if(apptResult.next()) {
+            if (apptResult.next()) {
                 return apptResult.getString("Type");
-            }else{
+            } else {
                 return "Unknown Type";
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("There was an issue retrieving appointment type from DB");
             System.out.println(e.getMessage());
         }
@@ -177,9 +179,8 @@ public class DashboardController {
         ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
 
         while (appointments.next()) {
-            if (Objects.equals(selectedView.getValue(), "Month")){
-                if (isThisMonth(appointments.getString("Start"))){
-                    System.out.println("month selected creating appointments only within this month");
+            if (Objects.equals(selectedView.getValue(), "Month")) {
+                if (isThisMonth(appointments.getString("Start"))) {
                     Appointment appt = new Appointment();
                     Button editButton = new Button();
                     editButton.setText("edit");
@@ -209,9 +210,8 @@ public class DashboardController {
                     appt.set_deleteButton(deleteButton);
                     appointmentList.add(appt);
                 }
-            }else {
-                if (isThisWeek(appointments.getString("Start"))){
-                    System.out.println("week selected creating appointments only within this week");
+            } else {
+                if (isThisWeek(appointments.getString("Start"))) {
                     Appointment appt = new Appointment();
                     Button editButton = new Button();
                     editButton.setText("edit");
@@ -322,6 +322,32 @@ public class DashboardController {
         customerEdit.setCellValueFactory(new PropertyValueFactory<>("editButton"));
 
         customerTable.setItems(customerList);
+    }
+
+    private void notifyUpcomingAppointment(ObservableList<Appointment> appointments) {
+        upcomingAppointments = FXCollections.observableArrayList();
+        appointments.forEach((appt) -> {
+            try {
+                if (apptStartWithin(appt, 15)) {
+                    System.out.println(appt.getId() + " is within 15 minutes of login");
+                }
+            } catch (ParseException e) {
+                System.out.println("Error occurred while checking for upcoming appointment(s)");
+            }
+        });
+        if (!upcomingAppointments.isEmpty()){
+            AtomicReference<Alert> alert = new AtomicReference<>(new Alert(Alert.AlertType.INFORMATION));
+            StringBuilder body = new StringBuilder("You have " + upcomingAppointments.size() + " upcoming appointments...");
+            for (Appointment appt : upcomingAppointments) {
+                body.append("\nAppointment ID: ").append(appt.getId());
+                body.append(" , Start Date: ").append(appt.getStartDate());
+                body.append(" , Start Time: ").append(appt.getStartTime());
+            }
+            alert.get().setContentText(body.toString());
+            alert.get().setTitle("Upcoming Appointment(s)");
+            alert.get().setHeaderText(null);
+            alert.get().showAndWait();
+        }
     }
 
     @FXML
@@ -466,7 +492,7 @@ public class DashboardController {
     }
 
     private boolean isThisWeek(String start) throws ParseException {
-        if (isThisMonth(start)){
+        if (isThisMonth(start)) {
             Calendar localCal = Calendar.getInstance();
             Calendar apptCal = Calendar.getInstance();
 
@@ -475,6 +501,21 @@ public class DashboardController {
             apptCal.setTime(localDate);
 
             return apptCal.get(Calendar.WEEK_OF_YEAR) == localCal.get(Calendar.WEEK_OF_YEAR);
+        } else {
+            return false;
+        }
+    }
+
+    private boolean apptStartWithin(Appointment appt, int minutes) throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
+
+        Date localDate = new Date(System.currentTimeMillis());
+        Date apptDate = formatter.parse(appt.getStart());
+
+        if(apptDate.getTime() - localDate.getTime() <= TimeUnit.MINUTES.toMillis(minutes)
+        && apptDate.getTime() - localDate.getTime() > 0){
+            upcomingAppointments.add(appt);
+            return true;
         }else {
             return false;
         }

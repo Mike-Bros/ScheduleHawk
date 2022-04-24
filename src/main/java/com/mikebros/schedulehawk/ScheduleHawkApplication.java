@@ -40,6 +40,9 @@ public class ScheduleHawkApplication extends Application {
     public static void changeScene(ActionEvent event, String newSceneName) {
         try {
             lastSceneChangeEvent = event;
+//            if (Objects.equals(((Node) lastSceneChangeEvent.getSource()).getId(), "loginButton")){
+//
+//            }
             FXMLLoader loader = new FXMLLoader(ScheduleHawkApplication.class.getResource("/com/mikebros/schedulehawk/views/" + newSceneName + ".fxml"));
             Parent newRoot = loader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
