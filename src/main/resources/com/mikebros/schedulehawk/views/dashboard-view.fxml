@@ -13,6 +13,7 @@
       <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1700.0">
          <children>
             <Button fx:id="logout" layoutX="50.0" layoutY="40.0" mnemonicParsing="false" onAction="#logoutButtonClicked" text="Logout" />
+            <Button fx:id="reports" layoutX="1576.0" layoutY="40.0" mnemonicParsing="false" onAction="#reportsButtonClicked" prefHeight="29.0" prefWidth="94.0" text="Reports" />
             <Button fx:id="createAppointment" layoutX="50.0" layoutY="87.0" mnemonicParsing="false" onAction="#createNewAppointmentButtonClicked" text="Create New Appointment" />
             <ComboBox fx:id="selectedView" layoutX="1520.0" layoutY="87.0" onAction="#updateApptTable" prefWidth="150.0" />
             <TableView fx:id="appointmentTable" layoutX="50.0" layoutY="124.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="444.0" prefWidth="1620.0">

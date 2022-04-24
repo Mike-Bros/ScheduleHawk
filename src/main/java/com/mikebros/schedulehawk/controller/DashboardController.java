@@ -73,6 +73,8 @@ public class DashboardController {
     @FXML
     private Button logout;
     @FXML
+    private Button reports;
+    @FXML
     private TableView<Customer> customerTable;
     @FXML
     private TableColumn<Customer, String> postalCode;
@@ -464,15 +466,14 @@ public class DashboardController {
         ScheduleHawkApplication.changeScene(event, "customer-edit-view");
     }
 
-    public void logoutButtonClicked(ActionEvent event) throws InterruptedException {
-//        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//        alert.setContentText("The logout button was clicked");
-//        alert.setTitle("Logout");
-//        alert.setHeaderText(null);
-//        alert.showAndWait();
-
+    public void logoutButtonClicked(ActionEvent event){
         System.out.println("Clicked on the logout button, returning to login view...");
         ScheduleHawkApplication.changeScene(event, "login-view");
+    }
+
+    public void reportsButtonClicked(ActionEvent event){
+        System.out.println("Clicked on the reports button, going to reports view");
+        ScheduleHawkApplication.changeScene(event, "reports-view");
     }
 
     private void goAhead() {
