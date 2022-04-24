@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class EditAppointmentController {
 
@@ -124,6 +125,9 @@ public class EditAppointmentController {
         } else if (!apptIsWithinBusinessHours()) {
             System.out.println("Appointments cannot be scheduled outside of business hours");
             err_message_label.setText("Appointments cannot be scheduled outside of business hours (8:00 a.m. to 10:00 p.m. EST Mon-Fri)");
+        } else if (customerHasOverlappingAppt()) {
+            System.out.println("Customer has an overlapping appointment");
+            err_message_label.setText("Cannot overlap appointment times with an existing customer appointment");
         } else {
             if (Objects.equals(userData, "new")) {
                 System.out.println("Creating new appointment");
@@ -145,29 +149,78 @@ public class EditAppointmentController {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         Date localDate = formatter.parse(convertLocalToEST(getDateTimeString(start_date, start_hour, start_min)));
         apptCal.setTime(localDate);
-        System.out.println(apptCal.get(Calendar.DAY_OF_WEEK));
-        if (apptCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || apptCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY){
-            System.out.println("Not within Business Hours");
+        if (apptCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || apptCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
             return false;
         }
         localDate = formatter.parse(convertLocalToEST(getDateTimeString(end_date, end_hour, end_min)));
         apptCal.setTime(localDate);
         System.out.println(apptCal.get(Calendar.DAY_OF_WEEK));
-        if (apptCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || apptCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY){
-            System.out.println("Not within Business Hours");
+        if (apptCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || apptCal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
             return false;
         }
 
         int estStart = Integer.parseInt(getHour(convertLocalToEST(getDateTimeString(start_date, start_hour, start_min))));
         int estEnd = Integer.parseInt(getHour(convertLocalToEST(getDateTimeString(end_date, end_hour, end_min))));
 
-        if (estStart >= 8 && estStart <= 22 && estEnd >= 8 && estEnd <= 22){
+        if (estStart >= 8 && estStart <= 22 && estEnd >= 8 && estEnd <= 22) {
             System.out.println("Within Business Hours");
             return true;
-        }else{
+        } else {
             System.out.println("Not within Business Hours");
             return false;
         }
+    }
+
+    private boolean customerHasOverlappingAppt() throws Exception {
+        AtomicReference<Boolean> overlappingApptExists = new AtomicReference<>(false);
+        ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
+        String query = "SELECT * FROM appointments WHERE Customer_ID = " + customer_id.getText();
+        ResultSet appointments = DBConnection.query(query);
+
+        while (appointments.next()) {
+            Appointment appt = new Appointment();
+            appt.set_start(convertFromUTC(appointments.getString("Start")));
+            appt.set_end(convertFromUTC(appointments.getString("End")));
+            appointmentList.add(appt);
+        }
+        if (appointmentList.isEmpty()) {
+            return false;
+        } else {
+            appointmentList.forEach((appt) -> {
+                try {
+                    if (onSameDay(appt.getStart(), getDateTimeString(start_date, start_hour, start_min)) || onSameDay(appt.getStart(), getDateTimeString(end_date, end_hour, end_min))) {
+                        LocalTime startA = LocalTime.of(Integer.parseInt(getHour(appt.getStart())), Integer.parseInt(getMinutes(appt.getStart())));
+                        LocalTime stopA = LocalTime.of(Integer.parseInt(getHour(appt.getEnd())), Integer.parseInt(getMinutes(appt.getEnd())));
+
+                        LocalTime startB = LocalTime.of(Integer.parseInt(start_hour.getValue()), Integer.parseInt(start_hour.getValue()));
+                        LocalTime stopB = LocalTime.of(Integer.parseInt(end_hour.getValue()), Integer.parseInt(end_min.getValue()));
+
+                        if (startA.isBefore(stopB) && stopA.isAfter(startB)) {
+                            overlappingApptExists.set(true);
+                        }
+                    }
+                } catch (ParseException e) {
+                    System.out.println(e.getMessage());
+                }
+            });
+        }
+        return overlappingApptExists.get();
+    }
+
+    private boolean onSameDay(String dt_1, String dt_2) throws ParseException {
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+
+        Date date1 = formatter.parse(dt_1);
+        Date date2 = formatter.parse(dt_2);
+        cal1.setTime(date1);
+        cal2.setTime(date2);
+
+        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)
+                && cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH)
+                && cal1.get(Calendar.DAY_OF_MONTH) == cal2.get(Calendar.DAY_OF_MONTH);
+
     }
 
     public void backButtonClicked(ActionEvent event) {
@@ -368,18 +421,18 @@ public class EditAppointmentController {
         ZonedDateTime zonedDateTime = ZonedDateTime.of(localDate, localTime, ZoneId.of("UTC"));
 
         dt = zonedDateTime.withZoneSameInstant(ZoneId.systemDefault()).toString();
-        dt = dt.substring(0,16); // removes zone info
+        dt = dt.substring(0, 16); // removes zone info
         dt = dt.replace("T", " ");
         return dt;
     }
 
-    private String convertLocalToEST(String dt){
+    private String convertLocalToEST(String dt) {
         LocalDate localDate = LocalDate.parse(dt.split(" ")[0]);
         LocalTime localTime = LocalTime.parse(dt.split(" ")[1]);
         ZonedDateTime zonedDateTime = ZonedDateTime.of(localDate, localTime, ZoneId.of(ZoneId.systemDefault().toString()));
 
         dt = String.valueOf(zonedDateTime.withZoneSameInstant(ZoneId.of("US/Eastern")));
-        dt = dt.substring(0,16); // removes zone info
+        dt = dt.substring(0, 16); // removes zone info
         dt = dt.replace("T", " ");
         return dt;
     }
