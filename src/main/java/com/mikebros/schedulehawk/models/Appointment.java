@@ -234,10 +234,20 @@ public class Appointment {
         return this.start;
     }
 
+    /**
+     * Gets start date.
+     *
+     * @return the start date
+     */
     public String getStartDate() {
         return startDate;
     }
 
+    /**
+     * Gets start time.
+     *
+     * @return the start time
+     */
     public String getStartTime() {
         return startTime;
     }
@@ -251,10 +261,20 @@ public class Appointment {
         return this.end;
     }
 
+    /**
+     * Gets end date.
+     *
+     * @return the end date
+     */
     public String getEndDate() {
         return endDate;
     }
 
+    /**
+     * Gets end time.
+     *
+     * @return the end time
+     */
     public String getEndTime() {
         return endTime;
     }
@@ -324,18 +344,26 @@ public class Appointment {
 
 
     /**
-     * Get edit button string.
+     * Get edit button.
      *
-     * @return the string
+     * @return the edit button
      */
     public Button getEditButton() {
         return this.editButton;
     }
 
+    /**
+     * Gets delete button.
+     *
+     * @return the delete button
+     */
     public Button getDeleteButton() {
         return this.deleteButton;
     }
 
+    /**
+     * Convert start, end, createDate, and lastUpdate to UTC.
+     */
     private void convertDatesToUTC() {
         this.start = convertUTC(this.start);
         this.end = convertUTC(this.end);
@@ -343,6 +371,12 @@ public class Appointment {
         this.lastUpdate = convertUTC(this.lastUpdate);
     }
 
+    /**
+     * Convert given DateTime string to UTC.
+     *
+     * @param dt the datetime string in local time
+     * @return the UTC datetime string
+     */
     private String convertUTC(String dt) {
         LocalDate localDate = LocalDate.parse(dt.split(" ")[0]);
         LocalTime localTime = LocalTime.parse(dt.split(" ")[1]);
@@ -354,6 +388,11 @@ public class Appointment {
         return dt;
     }
 
+    /**
+     * Creates appointment in the database from local Appointment object.
+     *
+     * @throws Exception the exception
+     */
     public void create() throws Exception {
         convertDatesToUTC();
         String query = "INSERT INTO appointments " +
@@ -367,6 +406,11 @@ public class Appointment {
         DBConnection.update(query);
     }
 
+    /**
+     * Updates appointment in the database from local Appointment object.
+     *
+     * @throws Exception the exception
+     */
     public void update() throws Exception {
         convertDatesToUTC();
         String query = "UPDATE appointments " +
