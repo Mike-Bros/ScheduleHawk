@@ -32,6 +32,7 @@ import java.util.Arrays;
 
 public class ReportsController {
 
+    private int nextGridRow;
     @FXML
     private GridPane mainGrid;
     @FXML
@@ -40,7 +41,6 @@ public class ReportsController {
     private CategoryAxis typeAxisX;
     @FXML
     private NumberAxis typeAxisY;
-
     @FXML
     private BarChart<String, Number> monthChart;
     @FXML
@@ -54,9 +54,11 @@ public class ReportsController {
         System.out.println("......................................................................................");
         System.out.println("Initializing Reports View");
 
+        nextGridRow = 1;
         setTypeChartData();
         setMonthChartData();
         addTablesForEachContact();
+        createLocationChart();
 
         System.out.println("Finished initializing Reports View");
         System.out.println("......................................................................................\n");
@@ -74,9 +76,7 @@ public class ReportsController {
         for (String type : types) {
             set.getData().add(new XYChart.Data<>(type, getCountOfType(type)));
         }
-        ;
         set.setName("Types");
-
         typeChart.getData().addAll(set);
     }
 
@@ -185,7 +185,8 @@ public class ReportsController {
         vBox.getChildren().add(tableView);
 
         GridPane.setMargin(vBox, new Insets(20, 100, 20, 100));
-        mainGrid.addRow(Integer.parseInt(contactId),vBox);
+        mainGrid.addRow(nextGridRow,vBox);
+        nextGridRow++;
     }
 
     private ObservableList<Appointment> createAppointments(String customerId) throws Exception {
@@ -207,6 +208,41 @@ public class ReportsController {
             appointmentList.add(appt);
         }
         return appointmentList;
+    }
+
+    private void createLocationChart() throws Exception {
+        CategoryAxis locationAxisX = new CategoryAxis();
+        NumberAxis locationAxisY = new NumberAxis();
+        BarChart<String, Number> locationChart = new BarChart<String, Number>(locationAxisX,locationAxisY);
+        locationChart.setTitle("Number of Appointments by Location");
+
+        ObservableList<String> locations = FXCollections.observableArrayList();
+        String query = "SELECT * FROM appointments;";
+        ResultSet appointments = DBConnection.query(query);
+        while (appointments.next()) {
+            locations.add(appointments.getString("Location"));
+        }
+
+        XYChart.Series set = new XYChart.Series<>();
+        for (String loc : locations) {
+            set.getData().add(new XYChart.Data<>(loc, getCountOfLocation(loc)));
+        }
+        set.setName("Locations");
+        locationChart.getData().addAll(set);
+
+        VBox vBox = new VBox(locationChart);
+        mainGrid.addRow(nextGridRow,vBox);
+        nextGridRow++;
+    }
+
+    private Number getCountOfLocation(String loc) throws Exception {
+        String query = "SELECT * FROM appointments WHERE Location = \"" + loc + "\";";
+        int count = 0;
+        ResultSet appointments = DBConnection.query(query);
+        while (appointments.next()) {
+            count++;
+        }
+        return count;
     }
 
     private String convertFromUTC(String dt) {
