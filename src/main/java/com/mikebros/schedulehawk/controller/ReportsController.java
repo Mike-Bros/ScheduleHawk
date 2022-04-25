@@ -48,6 +48,11 @@ public class ReportsController {
     @FXML
     private Button back_button;
 
+    /**
+     * Initialize the reports-view.fxml.
+     *
+     * @throws Exception the exception
+     */
     public void initialize() throws Exception {
         System.out.println("......................................................................................");
         System.out.println("Initializing Reports View");
@@ -62,6 +67,11 @@ public class ReportsController {
         System.out.println("......................................................................................\n");
     }
 
+    /**
+     * Helper for initialize, Sets type chart data.
+     *
+     * @throws Exception the exception
+     */
     private void setTypeChartData() throws Exception {
         ObservableList<String> types = FXCollections.observableArrayList();
         String query = "SELECT * FROM appointments;";
@@ -78,6 +88,13 @@ public class ReportsController {
         typeChart.getData().addAll(set);
     }
 
+    /**
+     * Gets count of appointments with given type in DB.
+     *
+     * @param type the type
+     * @return the count of type
+     * @throws Exception the exception
+     */
     private Number getCountOfType(String type) throws Exception {
         String query = "SELECT * FROM appointments WHERE Type = \"" + type + "\";";
         int count = 0;
@@ -88,6 +105,11 @@ public class ReportsController {
         return count;
     }
 
+    /**
+     * Helper for initialize, Sets month chart data.
+     *
+     * @throws Exception the exception
+     */
     private void setMonthChartData() throws Exception {
         monthAxisX.setCategories(FXCollections.<String>observableList(
                 Arrays.asList("January", "February", "March", "April", "May", "June", "July", "August",
@@ -115,6 +137,13 @@ public class ReportsController {
         monthChart.getData().addAll(set);
     }
 
+    /**
+     * Gets count of appointments with given month in DB.
+     *
+     * @param month the month
+     * @return the count of month
+     * @throws Exception the exception
+     */
     private Object getCountOfMonth(int month) throws Exception {
         int count = 0;
         String query = "SELECT * FROM appointments";
@@ -131,6 +160,11 @@ public class ReportsController {
         return count;
     }
 
+    /**
+     * Add schedule tables for each contact.
+     *
+     * @throws Exception the exception
+     */
     private void addTablesForEachContact() throws Exception {
         String query = "SELECT * FROM contacts;";
         ResultSet contacts = DBConnection.query(query);
@@ -139,6 +173,13 @@ public class ReportsController {
         }
     }
 
+    /**
+     * Helper function for addTablesForEachContact, creates and adds a table to the grid
+     *
+     * @param contactName the contact name
+     * @param contactId   the contact id
+     * @throws Exception the exception
+     */
     private void createTable(String contactName, String contactId) throws Exception {
         VBox vBox = new VBox();
         vBox.setMaxHeight(200);
@@ -186,6 +227,13 @@ public class ReportsController {
         nextGridRow++;
     }
 
+    /**
+     * Create appointments observable list of appointments with the customer id customerId.
+     *
+     * @param customerId the customer id
+     * @return the observable list of appointments
+     * @throws Exception the exception
+     */
     private ObservableList<Appointment> createAppointments(String customerId) throws Exception {
         ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
         String query = "SELECT * FROM appointments WHERE Customer_ID = " + customerId;
@@ -207,6 +255,11 @@ public class ReportsController {
         return appointmentList;
     }
 
+    /**
+     * Helper for initialize, Creates location chart and sets data.
+     *
+     * @throws Exception the exception
+     */
     private void createLocationChart() throws Exception {
         CategoryAxis locationAxisX = new CategoryAxis();
         NumberAxis locationAxisY = new NumberAxis();
@@ -232,6 +285,13 @@ public class ReportsController {
         nextGridRow++;
     }
 
+    /**
+     * Gets count of appointments with given location.
+     *
+     * @param loc the location
+     * @return the count of appointments with location
+     * @throws Exception the exception
+     */
     private Number getCountOfLocation(String loc) throws Exception {
         String query = "SELECT * FROM appointments WHERE Location = \"" + loc + "\";";
         int count = 0;
@@ -242,6 +302,12 @@ public class ReportsController {
         return count;
     }
 
+    /**
+     * Convert from UTC dateTime string to local dateTime string.
+     *
+     * @param dt the UTC dateTime
+     * @return the string
+     */
     private String convertFromUTC(String dt) {
         LocalDate localDate = LocalDate.parse(dt.split(" ")[0]);
         LocalTime localTime = LocalTime.parse(dt.split(" ")[1]);
@@ -253,6 +319,11 @@ public class ReportsController {
         return dt;
     }
 
+    /**
+     * Back button clicked.
+     *
+     * @param event the button click event
+     */
     @FXML
     public void backButtonClicked(ActionEvent event) {
         System.out.println("Back button clicked");
