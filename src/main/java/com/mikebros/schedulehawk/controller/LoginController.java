@@ -83,6 +83,12 @@ public class LoginController{
         }
     }
 
+    /**
+     * Helper function to log user login attempts to login_activity.txt.
+     *
+     * @param validLogin boolean if the login was valid or not
+     * @throws IOException the io exception
+     */
     private void logActivity(Boolean validLogin) throws IOException {
         FileWriter activityLog = new FileWriter("login_activity.txt", true);
         activityLog.append("......................................................................................\n");
