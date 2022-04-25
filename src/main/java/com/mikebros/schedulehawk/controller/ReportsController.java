@@ -137,7 +137,6 @@ public class ReportsController {
         String query = "SELECT * FROM contacts;";
         ResultSet contacts = DBConnection.query(query);
         while (contacts.next()){
-            System.out.println(contacts.getString("Contact_Name"));
             createTable(contacts.getString("Contact_Name"), contacts.getString("Contact_ID"));
         }
     }

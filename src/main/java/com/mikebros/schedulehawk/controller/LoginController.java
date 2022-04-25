@@ -9,8 +9,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.ResultSet;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Properties;
 
@@ -69,11 +74,27 @@ public class LoginController{
 
         if (validateLogin(usernameInput.getText(), passwordInput.getText())) {
             System.out.println("Login attempt successful");
+            logActivity(true);
             ScheduleHawkApplication.changeScene(event,"dashboard-view");
         } else {
             System.out.println("Login attempt failed");
+            logActivity(false);
             warningLabel.setText(props.getProperty(userLang + "warningLabel"));
         }
+    }
+
+    private void logActivity(Boolean validLogin) throws IOException {
+        FileWriter activityLog = new FileWriter("login_activity.txt", true);
+        activityLog.append("......................................................................................\n");
+        activityLog.append("Login Attempted @").append(String.valueOf(LocalDateTime.now()));
+        activityLog.append("\nBy User: ").append(usernameInput.getText());
+        if (validLogin){
+            activityLog.append("\nThis login attempt has succeeded");
+        }else{
+            activityLog.append("\nThis login attempt has failed");
+        }
+        activityLog.append("\n......................................................................................");
+        activityLog.close();
     }
 
     /**
