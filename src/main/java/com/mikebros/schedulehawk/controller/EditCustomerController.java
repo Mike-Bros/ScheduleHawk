@@ -18,6 +18,9 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
+/**
+ * The edit customer controller.
+ */
 public class EditCustomerController {
 
     private String userData;

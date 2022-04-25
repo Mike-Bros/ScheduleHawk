@@ -25,6 +25,9 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 
+/**
+ * The reports controller.
+ */
 public class ReportsController {
 
     private int nextGridRow;

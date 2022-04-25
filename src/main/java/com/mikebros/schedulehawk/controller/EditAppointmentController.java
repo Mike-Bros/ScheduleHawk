@@ -20,6 +20,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * The edit appointment controller.
+ */
 public class EditAppointmentController {
 
     private String userData;

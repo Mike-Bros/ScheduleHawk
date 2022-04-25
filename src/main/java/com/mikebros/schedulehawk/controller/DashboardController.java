@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * The type Dashboard controller.
+ * The dashboard controller.
  */
 public class DashboardController {
     @FXML
