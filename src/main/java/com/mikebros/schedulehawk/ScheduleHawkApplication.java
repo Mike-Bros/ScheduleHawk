@@ -23,6 +23,11 @@ public class ScheduleHawkApplication extends Application {
     public ScheduleHawkApplication() {
     }
 
+    /**
+     * Implementation of application start method .
+     *
+     * @param stage        the initial stage of the application
+     */
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(Objects.requireNonNull(ScheduleHawkApplication.class.getResource("/com/mikebros/schedulehawk/views/login-view.fxml")));
         Scene scene = new Scene(root);
@@ -61,14 +66,29 @@ public class ScheduleHawkApplication extends Application {
         }
     }
 
+    /**
+     * API for controllers to sets active user.
+     *
+     * @param activeUser    the active user
+     */
     public static void setActiveUser(User activeUser) {
         ScheduleHawkApplication.activeUser = activeUser;
     }
 
+    /**
+     * Gets active user.
+     *
+     * @return User         the active user
+     */
     public static User getActiveUser() {
         return activeUser;
     }
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         launch();
     }

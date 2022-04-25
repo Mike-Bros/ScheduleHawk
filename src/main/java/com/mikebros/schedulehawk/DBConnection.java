@@ -45,6 +45,12 @@ public class DBConnection {
         return conn.createStatement().executeQuery(query);
     }
 
+    /**
+     * Run an update query.
+     *
+     * @param query the update query
+     * @throws Exception the exception
+     */
     public static void update(String query) throws Exception {
         makeConnection();
         conn.createStatement().executeUpdate(query);
