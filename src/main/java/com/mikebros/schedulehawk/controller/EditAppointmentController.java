@@ -75,6 +75,11 @@ public class EditAppointmentController {
     @FXML
     private Label err_message_label;
 
+    /**
+     * Initialize the edit-view.fxml.
+     *
+     * @throws Exception the exception
+     */
     public void initialize() throws Exception {
         System.out.println("......................................................................................");
         System.out.println("Initializing Edit View");
@@ -86,12 +91,20 @@ public class EditAppointmentController {
         System.out.println("......................................................................................\n");
     }
 
+    /**
+     * Helper for initialize, Gets user data from the last change scene event.
+     */
     private void getUserData() {
         ActionEvent loadEvent = ScheduleHawkApplication.lastSceneChangeEvent;
         Node eventNode = (Node) loadEvent.getSource();
         userData = (String) eventNode.getUserData();
     }
 
+    /**
+     * Helper for initialize, Sets various form fields.
+     *
+     * @throws Exception the exception
+     */
     private void setFormFields() throws Exception {
         setComboBoxes();
         err_message_label.setText("");
@@ -103,6 +116,12 @@ public class EditAppointmentController {
         }
     }
 
+    /**
+     * Submit button clicked.
+     *
+     * @param event the button click event
+     * @throws Exception the exception
+     */
     @FXML
     private void submitButtonClicked(ActionEvent event) throws Exception {
         err_message_label.setText("");
@@ -143,6 +162,12 @@ public class EditAppointmentController {
         }
     }
 
+    /**
+     * Checks if appointment is within business hours.
+     *
+     * @return the boolean if appointment is with business hours
+     * @throws ParseException the parse exception
+     */
     private boolean apptIsWithinBusinessHours() throws ParseException {
         Calendar apptCal = Calendar.getInstance();
 
@@ -170,6 +195,15 @@ public class EditAppointmentController {
         }
     }
 
+    /**
+     * Checks if customer has overlapping appointments.
+     *
+     * Uses lambda function to more easily iterate over an ObservableList where the contents of the objects within
+     * the list are needed without the need to define a new helper method
+     *
+     * @return the boolean if customer has overlapping appointments
+     * @throws Exception the exception
+     */
     private boolean customerHasOverlappingAppt() throws Exception {
         AtomicReference<Boolean> overlappingApptExists = new AtomicReference<>(false);
         ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
@@ -209,6 +243,14 @@ public class EditAppointmentController {
         return overlappingApptExists.get();
     }
 
+    /**
+     * Checks if given datetimes are on the same day boolean.
+     *
+     * @param dt_1 the first datetime
+     * @param dt_2 the second datetim
+     * @return the boolean
+     * @throws ParseException the parse exception
+     */
     private boolean onSameDay(String dt_1, String dt_2) throws ParseException {
         Calendar cal1 = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();
@@ -225,11 +267,21 @@ public class EditAppointmentController {
 
     }
 
+    /**
+     * Back button clicked.
+     *
+     * @param event the button click event
+     */
     public void backButtonClicked(ActionEvent event) {
         System.out.println("Back button clicked");
         ScheduleHawkApplication.changeScene(event, "dashboard-view");
     }
 
+    /**
+     * Helper function for setFormFields, Sets combo boxes.
+     *
+     * @throws Exception the exception
+     */
     private void setComboBoxes() throws Exception {
         ObservableList<String> hours = FXCollections.observableArrayList();
         for (int i = 0; i <= 23; i++) {
@@ -268,6 +320,9 @@ public class EditAppointmentController {
         contact_name.setItems(getContactNamesFromDB());
     }
 
+    /**
+     * Helper function for setFormFields, Sets new user fields.
+     */
     private void setNewUserFields() {
         User activeUser = ScheduleHawkApplication.getActiveUser();
         appointment_id.setText("new appt");
@@ -287,6 +342,12 @@ public class EditAppointmentController {
         last_update_min.setValue(localMin);
     }
 
+    /**
+     * Helper function for setFormFields, Sets edit user fields.
+     *
+     * @param appointmentId the appointment id
+     * @throws Exception the exception
+     */
     private void setEditUserFields(String appointmentId) throws Exception {
         Appointment appointment = createAppointmentFromDB(appointmentId);
         submit_button.setText("Update");
@@ -318,6 +379,13 @@ public class EditAppointmentController {
         last_updated_by.setText(appointment.getLastUpdatedBy());
     }
 
+    /**
+     * Create appointment from DB.
+     *
+     * @param appointmentId the id of the appoitment to create
+     * @return the appointment
+     * @throws Exception the exception
+     */
     private Appointment createAppointmentFromDB(String appointmentId) throws Exception {
         String query = "SELECT * FROM appointments WHERE Appointment_ID = " + appointmentId + ";";
         ResultSet appointment = DBConnection.query(query);
@@ -343,6 +411,12 @@ public class EditAppointmentController {
         return appt;
     }
 
+    /**
+     * Gets contact names from DB.
+     *
+     * @return the observable list of contact names from DB
+     * @throws Exception the exception
+     */
     private ObservableList<String> getContactNamesFromDB() throws Exception {
         String query = "SELECT * FROM contacts";
         ResultSet contacts = DBConnection.query(query);
@@ -356,6 +430,13 @@ public class EditAppointmentController {
         return contactList;
     }
 
+    /**
+     * Gets contact name from DB given contactId.
+     *
+     * @param contactId the contact id
+     * @return the contact name from DB
+     * @throws Exception the exception
+     */
     private String getContactNameFromDB(String contactId) throws Exception {
         String query = "SELECT * FROM contacts WHERE Contact_ID = " + contactId + ";";
         ResultSet contact = DBConnection.query(query);
@@ -363,6 +444,13 @@ public class EditAppointmentController {
         return contact.getString("Contact_Name");
     }
 
+    /**
+     * Gets contact id from DB given contact name
+     *
+     * @param name the name
+     * @return the contact id
+     * @throws Exception the exception
+     */
     private String getContactID(String name) throws Exception {
         String query = "SELECT * FROM contacts WHERE Contact_Name = \"" + name + "\";";
         ResultSet contacts = DBConnection.query(query);
@@ -371,6 +459,12 @@ public class EditAppointmentController {
         return contacts.getString("Contact_ID");
     }
 
+    /**
+     * Create Appointment from form fields on view.
+     *
+     * @return the appointment
+     * @throws Exception the exception
+     */
     private Appointment createAppointment() throws Exception {
         Appointment appt = new Appointment();
         appt.set_id(appointment_id.getText());
@@ -393,29 +487,61 @@ public class EditAppointmentController {
         return appt;
     }
 
+    /**
+     * Gets LocalDate object from dateTime string
+     *
+     * @param dateTime the dateTime string
+     * @return the localDate
+     */
     private LocalDate getLocalDate(String dateTime) {
         String[] arrStr = dateTime.split(" ");
         return LocalDate.parse(arrStr[0]);
     }
 
+    /**
+     * Gets hour given dateTime string.
+     *
+     * @param dateTime the dateTime string
+     * @return the hour
+     */
     private String getHour(String dateTime) {
         String[] arrStr = dateTime.split(" ");
         arrStr = arrStr[1].split(":");
         return arrStr[0];
     }
 
+    /**
+     * Gets minutes given dateTime string..
+     *
+     * @param dateTime the dateTime string
+     * @return the minutes
+     */
     private String getMinutes(String dateTime) {
         String[] arrStr = dateTime.split(" ");
         arrStr = arrStr[1].split(":");
         return arrStr[1];
     }
 
+    /**
+     * Puts together dateTime string from form fields.
+     *
+     * @param datePicker the date picker
+     * @param start_hour the start hour combobox
+     * @param start_min  the start min combobox
+     * @return the date time string
+     */
     private String getDateTimeString(DatePicker datePicker, ComboBox<String> start_hour, ComboBox<String> start_min) {
         String date = datePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         String time = start_hour.getValue() + ":" + start_min.getValue() + ":00";
         return date + " " + time;
     }
 
+    /**
+     * Convert from UTC dateTime string to local dateTime string.
+     *
+     * @param dt the UTC dateTime
+     * @return the string
+     */
     private String convertFromUTC(String dt) {
         LocalDate localDate = LocalDate.parse(dt.split(" ")[0]);
         LocalTime localTime = LocalTime.parse(dt.split(" ")[1]);
@@ -427,6 +553,12 @@ public class EditAppointmentController {
         return dt;
     }
 
+    /**
+     * Convert local dateTime to EST dateTime string.
+     *
+     * @param dt the local dateTime
+     * @return the string
+     */
     private String convertLocalToEST(String dt) {
         LocalDate localDate = LocalDate.parse(dt.split(" ")[0]);
         LocalTime localTime = LocalTime.parse(dt.split(" ")[1]);
@@ -437,6 +569,4 @@ public class EditAppointmentController {
         dt = dt.replace("T", " ");
         return dt;
     }
-
-
 }

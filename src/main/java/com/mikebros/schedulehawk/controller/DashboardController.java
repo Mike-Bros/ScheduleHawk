@@ -362,6 +362,9 @@ public class DashboardController {
     /**
      * Creates an alert if the user has upcoming appointments
      *
+     * Uses lambda function to more easily iterate over an ObservableList where the contents of the objects within
+     * the list are needed without the need to define a new helper method
+     *
      * @param appointments the observable list of appointments to check
      */
     private void notifyUpcomingAppointment(ObservableList<Appointment> appointments) {
@@ -420,6 +423,8 @@ public class DashboardController {
     /**
      * Delete appointment from the DB.
      *
+     * Uses lambda function to control the button actions of the alert
+     *
      * @param id the id of the appointment to delete
      */
     private void deleteAppointment(String id) {
@@ -477,6 +482,8 @@ public class DashboardController {
 
     /**
      * Delete customer from DB.
+     *
+     * Uses lambda function to control the button actions of the alert
      *
      * @param id the id of the customer to delete
      */
