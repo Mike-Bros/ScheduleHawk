@@ -129,10 +129,11 @@ public class DashboardController {
      */
     private void setView() {
         ObservableList<String> viewList = FXCollections.observableArrayList();
+        viewList.add("All");
         viewList.add("Week");
         viewList.add("Month");
         selectedView.setItems(viewList);
-        selectedView.setValue("Month");
+        selectedView.setValue("All");
     }
 
     /**
@@ -201,7 +202,36 @@ public class DashboardController {
         ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
 
         while (appointments.next()) {
-            if (Objects.equals(selectedView.getValue(), "Month")) {
+            if (Objects.equals(selectedView.getValue(), "All")) {
+                Appointment appt = new Appointment();
+                Button editButton = new Button();
+                editButton.setText("edit");
+                editButton.setUserData(appointments.getString("Appointment_ID"));
+                editButton.setOnAction(this::editApptButtonClicked);
+
+                Button deleteButton = new Button();
+                deleteButton.setText("delete");
+                deleteButton.setUserData(appointments.getString("Appointment_ID"));
+                deleteButton.setOnAction(this::deleteApptButtonClicked);
+
+                appt.set_id(appointments.getString("Appointment_ID"));
+                appt.set_title(appointments.getString("Title"));
+                appt.set_description(appointments.getString("Description"));
+                appt.set_location(appointments.getString("Location"));
+                appt.set_type(appointments.getString("Type"));
+                appt.set_start(convertFromUTC(appointments.getString("Start")));
+                appt.set_end(convertFromUTC(appointments.getString("End")));
+                appt.set_createDate(convertFromUTC(appointments.getString("Create_Date")));
+                appt.set_createdBy(appointments.getString("Created_By"));
+                appt.set_lastUpdate(convertFromUTC(appointments.getString("Last_Update")));
+                appt.set_lastUpdatedBy(appointments.getString("Last_Updated_By"));
+                appt.set_customerID(appointments.getString("Customer_ID"));
+                appt.set_userID(appointments.getString("User_ID"));
+                appt.set_contactID(getContact(appointments.getString("Contact_ID")));
+                appt.set_editButton(editButton);
+                appt.set_deleteButton(deleteButton);
+                appointmentList.add(appt);
+            } else if (Objects.equals(selectedView.getValue(), "Month")) {
                 if (isThisMonth(appointments.getString("Start"))) {
                     Appointment appt = new Appointment();
                     Button editButton = new Button();
@@ -360,7 +390,7 @@ public class DashboardController {
 
     /**
      * Creates an alert if the user has upcoming appointments
-     *
+     * <p>
      * Uses lambda function to more easily iterate over an ObservableList where the contents of the objects within
      * the list are needed without the need to define a new helper method
      *
@@ -377,7 +407,7 @@ public class DashboardController {
                 System.out.println("Error occurred while checking for upcoming appointment(s)");
             }
         });
-        if (!upcomingAppointments.isEmpty()){
+        if (!upcomingAppointments.isEmpty()) {
             AtomicReference<Alert> alert = new AtomicReference<>(new Alert(Alert.AlertType.INFORMATION));
             StringBuilder body = new StringBuilder("You have " + upcomingAppointments.size() + " upcoming appointments...");
             for (Appointment appt : upcomingAppointments) {
@@ -421,7 +451,7 @@ public class DashboardController {
 
     /**
      * Delete appointment from the DB.
-     *
+     * <p>
      * Uses lambda function to control the button actions of the alert
      *
      * @param id the id of the appointment to delete
@@ -481,7 +511,7 @@ public class DashboardController {
 
     /**
      * Delete customer from DB.
-     *
+     * <p>
      * Uses lambda function to control the button actions of the alert
      *
      * @param id the id of the customer to delete
@@ -555,7 +585,7 @@ public class DashboardController {
      *
      * @param event the button click event
      */
-    public void logoutButtonClicked(ActionEvent event){
+    public void logoutButtonClicked(ActionEvent event) {
         System.out.println("Clicked on the logout button, returning to login view...");
         ScheduleHawkApplication.changeScene(event, "login-view");
     }
@@ -565,7 +595,7 @@ public class DashboardController {
      *
      * @param event the button click event
      */
-    public void reportsButtonClicked(ActionEvent event){
+    public void reportsButtonClicked(ActionEvent event) {
         System.out.println("Clicked on the reports button, going to reports view");
         ScheduleHawkApplication.changeScene(event, "reports-view");
     }
@@ -613,7 +643,7 @@ public class DashboardController {
     /**
      * Check if appointment is starting within the next (minutes) minutes.
      *
-     * @param appt the appointment to check
+     * @param appt    the appointment to check
      * @param minutes the amount of minutes to check for
      * @return the boolean if appointment starts within minutes
      * @throws ParseException the parse exception
@@ -624,11 +654,11 @@ public class DashboardController {
         Date localDate = new Date(System.currentTimeMillis());
         Date apptDate = formatter.parse(appt.getStart());
 
-        if(apptDate.getTime() - localDate.getTime() <= TimeUnit.MINUTES.toMillis(minutes)
-        && apptDate.getTime() - localDate.getTime() > 0){
+        if (apptDate.getTime() - localDate.getTime() <= TimeUnit.MINUTES.toMillis(minutes)
+                && apptDate.getTime() - localDate.getTime() > 0) {
             upcomingAppointments.add(appt);
             return true;
-        }else {
+        } else {
             return false;
         }
     }
