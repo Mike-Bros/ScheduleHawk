@@ -14,7 +14,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.ResultSet;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Properties;
@@ -22,7 +21,7 @@ import java.util.Properties;
 /**
  * The login page controller.
  */
-public class LoginController{
+public class LoginController {
 
     Properties props;
     String userLang;
@@ -75,7 +74,7 @@ public class LoginController{
         if (validateLogin(usernameInput.getText(), passwordInput.getText())) {
             System.out.println("Login attempt successful");
             logActivity(true);
-            ScheduleHawkApplication.changeScene(event,"dashboard-view");
+            ScheduleHawkApplication.changeScene(event, "dashboard-view");
         } else {
             System.out.println("Login attempt failed");
             logActivity(false);
@@ -94,9 +93,9 @@ public class LoginController{
         activityLog.append("......................................................................................\n");
         activityLog.append("Login Attempted @").append(String.valueOf(LocalDateTime.now()));
         activityLog.append("\nBy User: ").append(usernameInput.getText());
-        if (validLogin){
+        if (validLogin) {
             activityLog.append("\nThis login attempt has succeeded");
-        }else{
+        } else {
             activityLog.append("\nThis login attempt has failed");
         }
         activityLog.append("\n......................................................................................");
@@ -118,7 +117,7 @@ public class LoginController{
         ResultSet rs = DBConnection.query(query);
         boolean isValid = rs.next();
 
-        if (isValid){
+        if (isValid) {
             User activeUser = new User();
             activeUser.setId(rs.getString("User_ID"));
             activeUser.setName(rs.getString("User_Name"));
@@ -137,11 +136,11 @@ public class LoginController{
         props = new Properties();
         InputStream is = ScheduleHawkApplication.class.getResourceAsStream("/com/mikebros/schedulehawk/language/login.properties");
         props.load(is);
-        if (is != null){
+        if (is != null) {
             userLang = System.getProperty("user.language");
             userLang += ".";
             is.close();
-        }else{
+        } else {
             throw new Exception("InputStream is null");
         }
     }
@@ -149,7 +148,7 @@ public class LoginController{
     /**
      * Sets the text of all elements to user language appropriate version.
      */
-    private void setDefaultText(){
+    private void setDefaultText() {
         loginTitle.setText(props.getProperty(userLang + "loginTitle"));
         languageLabel.setText(props.getProperty(userLang + "languageLabel"));
         loginButton.setText(props.getProperty(userLang + "loginButton"));

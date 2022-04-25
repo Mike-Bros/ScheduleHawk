@@ -11,7 +11,7 @@ public class FirstLevelDivision {
     /**
      * Instantiates a new First level division.
      */
-    public FirstLevelDivision(){
+    public FirstLevelDivision() {
 
     }
 

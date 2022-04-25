@@ -9,7 +9,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.text.Text;
 
 import java.sql.ResultSet;
 import java.time.LocalDate;
@@ -313,9 +312,9 @@ public class EditCustomerController {
     private String getFirstLevelDivisionID(String division) throws Exception {
         String query = "SELECT * FROM first_level_divisions WHERE Division = \"" + division + "\"";
         ResultSet divisions = DBConnection.query(query);
-        if (divisions.next()){
+        if (divisions.next()) {
             return divisions.getString("Division_ID");
-        }else{
+        } else {
             throw new Exception("No division found in the DB with the division name: " + division);
         }
     }
@@ -349,7 +348,7 @@ public class EditCustomerController {
         ZonedDateTime zonedDateTime = ZonedDateTime.of(localDate, localTime, ZoneId.of("UTC"));
 
         dt = zonedDateTime.withZoneSameInstant(ZoneId.systemDefault()).toString();
-        dt = dt.substring(0,16); // removes zone info
+        dt = dt.substring(0, 16); // removes zone info
         dt = dt.replace("T", " ");
         return dt;
     }

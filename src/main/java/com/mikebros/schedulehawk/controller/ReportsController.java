@@ -8,9 +8,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
@@ -20,10 +17,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import javafx.stage.Stage;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -121,11 +116,11 @@ public class ReportsController {
         int count = 0;
         String query = "SELECT * FROM appointments";
         ResultSet appointments = DBConnection.query(query);
-        while (appointments.next()){
+        while (appointments.next()) {
             String startDateTime = appointments.getString("Start");
             String startDate = startDateTime.split(" ")[0];
             int startMonth = Integer.parseInt(startDate.split("-")[1]);
-            if (startMonth == month){
+            if (startMonth == month) {
                 count++;
                 count++;
             }
@@ -136,7 +131,7 @@ public class ReportsController {
     private void addTablesForEachContact() throws Exception {
         String query = "SELECT * FROM contacts;";
         ResultSet contacts = DBConnection.query(query);
-        while (contacts.next()){
+        while (contacts.next()) {
             createTable(contacts.getString("Contact_Name"), contacts.getString("Contact_ID"));
         }
     }
@@ -184,7 +179,7 @@ public class ReportsController {
         vBox.getChildren().add(tableView);
 
         GridPane.setMargin(vBox, new Insets(20, 100, 20, 100));
-        mainGrid.addRow(nextGridRow,vBox);
+        mainGrid.addRow(nextGridRow, vBox);
         nextGridRow++;
     }
 
@@ -193,7 +188,7 @@ public class ReportsController {
         String query = "SELECT * FROM appointments WHERE Customer_ID = " + customerId;
         ResultSet appointments = DBConnection.query(query);
 
-        while (appointments.next()){
+        while (appointments.next()) {
             Appointment appt = new Appointment();
 
             appt.set_id(appointments.getString("Appointment_ID"));
@@ -212,7 +207,7 @@ public class ReportsController {
     private void createLocationChart() throws Exception {
         CategoryAxis locationAxisX = new CategoryAxis();
         NumberAxis locationAxisY = new NumberAxis();
-        BarChart<String, Number> locationChart = new BarChart<String, Number>(locationAxisX,locationAxisY);
+        BarChart<String, Number> locationChart = new BarChart<String, Number>(locationAxisX, locationAxisY);
         locationChart.setTitle("Number of Appointments by Location");
 
         ObservableList<String> locations = FXCollections.observableArrayList();
@@ -230,7 +225,7 @@ public class ReportsController {
         locationChart.getData().addAll(set);
 
         VBox vBox = new VBox(locationChart);
-        mainGrid.addRow(nextGridRow,vBox);
+        mainGrid.addRow(nextGridRow, vBox);
         nextGridRow++;
     }
 

@@ -10,7 +10,7 @@ public class Country {
     /**
      * Instantiates a new Country.
      */
-    public Country(){
+    public Country() {
 
     }
 

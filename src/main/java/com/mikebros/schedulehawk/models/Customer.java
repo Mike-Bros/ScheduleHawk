@@ -29,7 +29,7 @@ public class Customer {
     /**
      * Instantiates a new Customer.
      */
-    public Customer(){
+    public Customer() {
     }
 
     /**

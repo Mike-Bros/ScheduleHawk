@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 import java.util.Objects;
 
 /**
@@ -26,7 +27,7 @@ public class ScheduleHawkApplication extends Application {
     /**
      * Implementation of application start method .
      *
-     * @param stage        the initial stage of the application
+     * @param stage the initial stage of the application
      */
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(Objects.requireNonNull(ScheduleHawkApplication.class.getResource("/com/mikebros/schedulehawk/views/login-view.fxml")));
@@ -45,9 +46,6 @@ public class ScheduleHawkApplication extends Application {
     public static void changeScene(ActionEvent event, String newSceneName) {
         try {
             lastSceneChangeEvent = event;
-//            if (Objects.equals(((Node) lastSceneChangeEvent.getSource()).getId(), "loginButton")){
-//
-//            }
             FXMLLoader loader = new FXMLLoader(ScheduleHawkApplication.class.getResource("/com/mikebros/schedulehawk/views/" + newSceneName + ".fxml"));
             Parent newRoot = loader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -69,7 +67,7 @@ public class ScheduleHawkApplication extends Application {
     /**
      * API for controllers to sets active user.
      *
-     * @param activeUser    the active user
+     * @param activeUser the active user
      */
     public static void setActiveUser(User activeUser) {
         ScheduleHawkApplication.activeUser = activeUser;

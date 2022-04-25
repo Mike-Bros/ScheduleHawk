@@ -197,7 +197,7 @@ public class EditAppointmentController {
 
     /**
      * Checks if customer has overlapping appointments.
-     *
+     * <p>
      * Uses lambda function to more easily iterate over an ObservableList where the contents of the objects within
      * the list are needed without the need to define a new helper method
      *
