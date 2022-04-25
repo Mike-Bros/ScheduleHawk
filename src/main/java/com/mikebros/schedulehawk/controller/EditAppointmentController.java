@@ -178,6 +178,7 @@ public class EditAppointmentController {
 
         while (appointments.next()) {
             Appointment appt = new Appointment();
+            appt.set_id(appointments.getString("Appointment_ID"));
             appt.set_start(convertFromUTC(appointments.getString("Start")));
             appt.set_end(convertFromUTC(appointments.getString("End")));
             appointmentList.add(appt);
@@ -187,15 +188,17 @@ public class EditAppointmentController {
         } else {
             appointmentList.forEach((appt) -> {
                 try {
-                    if (onSameDay(appt.getStart(), getDateTimeString(start_date, start_hour, start_min)) || onSameDay(appt.getStart(), getDateTimeString(end_date, end_hour, end_min))) {
-                        LocalTime startA = LocalTime.of(Integer.parseInt(getHour(appt.getStart())), Integer.parseInt(getMinutes(appt.getStart())));
-                        LocalTime stopA = LocalTime.of(Integer.parseInt(getHour(appt.getEnd())), Integer.parseInt(getMinutes(appt.getEnd())));
+                    if (!Objects.equals(appt.getId(), appointment_id.getText())) {
+                        if (onSameDay(appt.getStart(), getDateTimeString(start_date, start_hour, start_min)) || onSameDay(appt.getStart(), getDateTimeString(end_date, end_hour, end_min))) {
+                            LocalTime startA = LocalTime.of(Integer.parseInt(getHour(appt.getStart())), Integer.parseInt(getMinutes(appt.getStart())));
+                            LocalTime stopA = LocalTime.of(Integer.parseInt(getHour(appt.getEnd())), Integer.parseInt(getMinutes(appt.getEnd())));
 
-                        LocalTime startB = LocalTime.of(Integer.parseInt(start_hour.getValue()), Integer.parseInt(start_hour.getValue()));
-                        LocalTime stopB = LocalTime.of(Integer.parseInt(end_hour.getValue()), Integer.parseInt(end_min.getValue()));
+                            LocalTime startB = LocalTime.of(Integer.parseInt(start_hour.getValue()), Integer.parseInt(start_hour.getValue()));
+                            LocalTime stopB = LocalTime.of(Integer.parseInt(end_hour.getValue()), Integer.parseInt(end_min.getValue()));
 
-                        if (startA.isBefore(stopB) && stopA.isAfter(startB)) {
-                            overlappingApptExists.set(true);
+                            if (startA.isBefore(stopB) && stopA.isAfter(startB)) {
+                                overlappingApptExists.set(true);
+                            }
                         }
                     }
                 } catch (ParseException e) {

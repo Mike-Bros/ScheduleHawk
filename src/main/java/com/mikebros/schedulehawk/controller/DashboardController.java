@@ -125,6 +125,9 @@ public class DashboardController {
         System.out.println("......................................................................................\n");
     }
 
+    /**
+     * Sets the appointment table view.
+     */
     private void setView() {
         ObservableList<String> viewList = FXCollections.observableArrayList();
         viewList.add("Week");
@@ -133,6 +136,12 @@ public class DashboardController {
         selectedView.setValue("Month");
     }
 
+    /**
+     * Update appointment table.
+     *
+     * @param event the event that caused this method to be called
+     * @throws Exception the exception
+     */
     @FXML
     private void updateApptTable(ActionEvent event) throws Exception {
         addApptRows(createAppointments(getAllAppointments()));
@@ -149,6 +158,12 @@ public class DashboardController {
         return DBConnection.query(query);
     }
 
+    /**
+     * Gets appointment type given the appointment id.
+     *
+     * @param id the appointment id
+     * @return the appointment type
+     */
     private String getAppointmentType(String id) {
         try {
             String query = "SELECT * FROM appointments WHERE Appointment_ID = " + id;
@@ -165,6 +180,12 @@ public class DashboardController {
         return "Unknown Type";
     }
 
+    /**
+     * Gets ResultSet of all customers from DB.
+     *
+     * @return the Result set of all customers
+     * @throws Exception the exception
+     */
     private ResultSet getAllCustomers() throws Exception {
         String query = "SELECT * FROM customers;";
         return DBConnection.query(query);
@@ -175,7 +196,7 @@ public class DashboardController {
      *
      * @param appointments ResultSet of appointments
      * @return the observable list of Appointment object(s)
-     * @throws SQLException the sql exception
+     * @throws Exception the exception
      */
     private ObservableList<Appointment> createAppointments(ResultSet appointments) throws Exception {
         ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
@@ -248,6 +269,13 @@ public class DashboardController {
         return appointmentList;
     }
 
+    /**
+     * Create observable list of Customer objects with a given ResultSet.
+     *
+     * @param customers ResultSet of customers
+     * @return the observable list of Customer object(s)
+     * @throws Exception the exception
+     */
     private ObservableList<Customer> createCustomers(ResultSet customers) throws Exception {
         ObservableList<Customer> customerList = FXCollections.observableArrayList();
 
@@ -308,6 +336,11 @@ public class DashboardController {
         appointmentTable.setItems(appointmentList);
     }
 
+    /**
+     * Add customer rows to dashboard.
+     *
+     * @param customerList the observable list of Customer object(s)
+     */
     private void addCustomerRows(ObservableList<Customer> customerList) {
         customerCustomerID.setCellValueFactory(new PropertyValueFactory<>("id"));
         customerName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -326,6 +359,11 @@ public class DashboardController {
         customerTable.setItems(customerList);
     }
 
+    /**
+     * Creates an alert if the user has upcoming appointments
+     *
+     * @param appointments the observable list of appointments to check
+     */
     private void notifyUpcomingAppointment(ObservableList<Appointment> appointments) {
         upcomingAppointments = FXCollections.observableArrayList();
         appointments.forEach((appt) -> {
@@ -352,6 +390,11 @@ public class DashboardController {
         }
     }
 
+    /**
+     * Edit appointment button clicked.
+     *
+     * @param event the button click event
+     */
     @FXML
     private void editApptButtonClicked(ActionEvent event) {
         Node node = (Node) event.getSource();
@@ -361,6 +404,11 @@ public class DashboardController {
         ScheduleHawkApplication.changeScene(event, "appointment-edit-view");
     }
 
+    /**
+     * Delete appointment button clicked.
+     *
+     * @param event the button click event
+     */
     private void deleteApptButtonClicked(ActionEvent event) {
         Node node = (Node) event.getSource();
         System.out.println("Clicked on the delete button for appointment: " + node.getUserData());
@@ -369,6 +417,11 @@ public class DashboardController {
         ScheduleHawkApplication.changeScene(event, "dashboard-view");
     }
 
+    /**
+     * Delete appointment from the DB.
+     *
+     * @param id the id of the appointment to delete
+     */
     private void deleteAppointment(String id) {
         AtomicReference<Alert> alert = new AtomicReference<>(new Alert(Alert.AlertType.WARNING));
         alert.get().setContentText("Are you sure you want to delete...\nAppointment ID: " + id + "\nAppointment Type: " + getAppointmentType(id));
@@ -398,6 +451,11 @@ public class DashboardController {
 
     }
 
+    /**
+     * Edit customer button clicked.
+     *
+     * @param event the button click event
+     */
     private void editCustomerButtonClicked(ActionEvent event) {
         Node node = (Node) event.getSource();
         System.out.println("Clicked on the edit button for customer: " + node.getUserData());
@@ -405,6 +463,11 @@ public class DashboardController {
         ScheduleHawkApplication.changeScene(event, "customer-edit-view");
     }
 
+    /**
+     * Delete customer button clicked.
+     *
+     * @param event the button click event
+     */
     private void deleteCustomerButtonClicked(ActionEvent event) {
         Node node = (Node) event.getSource();
         System.out.println("Clicked on the delete button for customer: " + node.getUserData());
@@ -412,6 +475,11 @@ public class DashboardController {
         ScheduleHawkApplication.changeScene(event, "dashboard-view");
     }
 
+    /**
+     * Delete customer from DB.
+     *
+     * @param id the id of the customer to delete
+     */
     private void deleteCustomer(String id) {
         AtomicReference<Alert> alert = new AtomicReference<>(new Alert(Alert.AlertType.WARNING));
         alert.get().setContentText("Are you sure you want to delete customer: " + id + "?" + "\nThis will delete all appointments for this customer.");
@@ -452,6 +520,11 @@ public class DashboardController {
 
     }
 
+    /**
+     * Create new appointment button clicked.
+     *
+     * @param event the button click event
+     */
     @FXML
     private void createNewAppointmentButtonClicked(ActionEvent event) {
         System.out.println("Clicked on the button to create a new appointment...");
@@ -459,6 +532,11 @@ public class DashboardController {
         ScheduleHawkApplication.changeScene(event, "appointment-edit-view");
     }
 
+    /**
+     * Create new customer button clicked.
+     *
+     * @param event the button click event
+     */
     @FXML
     private void createNewCustomerButtonClicked(ActionEvent event) {
         System.out.println("Clicked on the button to create a new customer...");
@@ -466,20 +544,32 @@ public class DashboardController {
         ScheduleHawkApplication.changeScene(event, "customer-edit-view");
     }
 
+    /**
+     * Logout button clicked.
+     *
+     * @param event the button click event
+     */
     public void logoutButtonClicked(ActionEvent event){
         System.out.println("Clicked on the logout button, returning to login view...");
         ScheduleHawkApplication.changeScene(event, "login-view");
     }
 
+    /**
+     * Reports button clicked.
+     *
+     * @param event the button click event
+     */
     public void reportsButtonClicked(ActionEvent event){
         System.out.println("Clicked on the reports button, going to reports view");
         ScheduleHawkApplication.changeScene(event, "reports-view");
     }
 
-    private void goAhead() {
-        System.out.println("Go ahead");
-    }
-
+    /**
+     * Checks if start datetime is this month.
+     *
+     * @param start the start datetime
+     * @return the boolean if start is this month
+     */
     private boolean isThisMonth(String start) {
         String apptStart = convertFromUTC(start);
         String apptDate = apptStart.split(" ")[0];
@@ -492,6 +582,13 @@ public class DashboardController {
         return localMonth == Integer.parseInt(apptMonth) && localYear == Integer.parseInt(apptYear);
     }
 
+    /**
+     * Checks if start is this week
+     *
+     * @param start the start datetime
+     * @return the boolean if start is this week
+     * @throws ParseException the parse exception
+     */
     private boolean isThisWeek(String start) throws ParseException {
         if (isThisMonth(start)) {
             Calendar localCal = Calendar.getInstance();
@@ -507,6 +604,14 @@ public class DashboardController {
         }
     }
 
+    /**
+     * Check if appointment is starting within the next (minutes) minutes.
+     *
+     * @param appt the appointment to check
+     * @param minutes the amount of minutes to check for
+     * @return the boolean if appointment starts within minutes
+     * @throws ParseException the parse exception
+     */
     private boolean apptStartWithin(Appointment appt, int minutes) throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
 
@@ -522,6 +627,12 @@ public class DashboardController {
         }
     }
 
+    /**
+     * Convert from UTC datetime string to local datetime.
+     *
+     * @param dt the UTC datetime
+     * @return the local datetime string
+     */
     private String convertFromUTC(String dt) {
         LocalDate localDate = LocalDate.parse(dt.split(" ")[0]);
         LocalTime localTime = LocalTime.parse(dt.split(" ")[1]);
@@ -533,6 +644,13 @@ public class DashboardController {
         return dt;
     }
 
+    /**
+     * Gets first level division name of given division id.
+     *
+     * @param divisionID the division id
+     * @return the first level division name
+     * @throws Exception the exception
+     */
     private String getFirstLevelDivisionName(String divisionID) throws Exception {
         String query = "SELECT * FROM first_level_divisions WHERE Division_ID = " + divisionID;
         ResultSet firstLevelDivision = DBConnection.query(query);
@@ -540,6 +658,13 @@ public class DashboardController {
         return firstLevelDivision.getString("Division");
     }
 
+    /**
+     * Gets country name by division id.
+     *
+     * @param divisionID the division id
+     * @return the country name by division id
+     * @throws Exception the exception
+     */
     private String getCountryNameByDivisionID(String divisionID) throws Exception {
         String query = "SELECT * FROM first_level_divisions WHERE Division_ID = " + divisionID;
         ResultSet firstLevelDivision = DBConnection.query(query);
@@ -552,6 +677,13 @@ public class DashboardController {
         return country.getString("Country");
     }
 
+    /**
+     * Gets contact name from DB from given contact id.
+     *
+     * @param contactID the contact id
+     * @return the contact name
+     * @throws Exception the exception
+     */
     private String getContact(String contactID) throws Exception {
         String query = "SELECT * FROM contacts WHERE Contact_ID = " + contactID;
         ResultSet contact = DBConnection.query(query);
