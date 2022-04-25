@@ -62,6 +62,11 @@ public class EditCustomerController {
     @FXML
     private DatePicker last_update_date;
 
+    /**
+     * Initialize the edit-customer.fxml.
+     *
+     * @throws Exception the exception
+     */
     public void initialize() throws Exception {
         System.out.println("......................................................................................");
         System.out.println("Initializing Edit View");
@@ -73,12 +78,20 @@ public class EditCustomerController {
         System.out.println("......................................................................................\n");
     }
 
+    /**
+     * Helper for initialize, Gets user data from the last change scene event.
+     */
     private void getUserData() {
         ActionEvent loadEvent = ScheduleHawkApplication.lastSceneChangeEvent;
         Node eventNode = (Node) loadEvent.getSource();
         userData = (String) eventNode.getUserData();
     }
 
+    /**
+     * Helper for initialize, Sets various form fields.
+     *
+     * @throws Exception the exception
+     */
     private void setFormFields() throws Exception {
         setComboBoxes();
         err_message_label.setText("");
@@ -90,6 +103,9 @@ public class EditCustomerController {
         }
     }
 
+    /**
+     * Helper for setFormFields, Sets new customer fields.
+     */
     private void setNewCustomerFields() {
         User activeUser = ScheduleHawkApplication.getActiveUser();
         customer_id.setText("new appt");
@@ -110,6 +126,12 @@ public class EditCustomerController {
         last_update_min.setValue(localMin);
     }
 
+    /**
+     * Helper for setFormFields, Sets edit customer fields.
+     *
+     * @param customerID the customer id
+     * @throws Exception the exception
+     */
     private void setEditCustomerFields(String customerID) throws Exception {
         Customer customer = createCustomerFromDB(customerID);
         submit_button.setText("Update");
@@ -136,6 +158,13 @@ public class EditCustomerController {
         last_updated_by.setText(customer.getLastUpdatedBy());
     }
 
+    /**
+     * Gets first level division name by division id.
+     *
+     * @param divisionID the division id
+     * @return the first level division name
+     * @throws Exception the exception
+     */
     private String getFirstLevelDivisionName(String divisionID) throws Exception {
         String query = "SELECT * FROM first_level_divisions WHERE Division_ID = " + divisionID;
         ResultSet firstLevelDivision = DBConnection.query(query);
@@ -143,6 +172,13 @@ public class EditCustomerController {
         return firstLevelDivision.getString("Division");
     }
 
+    /**
+     * Gets country name by division id.
+     *
+     * @param divisionID the division id
+     * @return the country name by division id
+     * @throws Exception the exception
+     */
     private String getCountryNameByDivisionID(String divisionID) throws Exception {
         String query = "SELECT * FROM first_level_divisions WHERE Division_ID = " + divisionID;
         ResultSet firstLevelDivision = DBConnection.query(query);
@@ -155,6 +191,13 @@ public class EditCustomerController {
         return country.getString("Country");
     }
 
+    /**
+     * Create customer from DB with given customer id.
+     *
+     * @param customerID the customer id
+     * @return the customer
+     * @throws Exception the exception
+     */
     private Customer createCustomerFromDB(String customerID) throws Exception {
         String query = "SELECT * FROM customers WHERE Customer_ID = " + customerID + ";";
         ResultSet customer = DBConnection.query(query);
@@ -177,6 +220,11 @@ public class EditCustomerController {
         return cust;
     }
 
+    /**
+     * Initialize Helper, Sets combo boxes.
+     *
+     * @throws Exception the exception
+     */
     private void setComboBoxes() throws Exception {
         ObservableList<String> hours = FXCollections.observableArrayList();
         for (int i = 1; i <= 24; i++) {
@@ -207,6 +255,12 @@ public class EditCustomerController {
         country.setItems(getCountriesFromDB());
     }
 
+    /**
+     * Gets all countries from DB as an observable list.
+     *
+     * @return the observable list of countries from db
+     * @throws Exception the exception
+     */
     private ObservableList<String> getCountriesFromDB() throws Exception {
         String query = "SELECT * FROM countries";
         ResultSet countries = DBConnection.query(query);
@@ -220,6 +274,13 @@ public class EditCustomerController {
         return countryList;
     }
 
+    /**
+     * Gets country id from DB by country name.
+     *
+     * @param name the name
+     * @return the country id by name
+     * @throws Exception the exception
+     */
     private String getCountryIDByName(String name) throws Exception {
         String query = "SELECT * FROM countries WHERE country = \"" + name + "\"";
         ResultSet countries = DBConnection.query(query);
@@ -231,6 +292,13 @@ public class EditCustomerController {
         }
     }
 
+    /**
+     * Gets first level divisions from DB by country id.
+     *
+     * @param countryID the country id
+     * @return the first level divisions from db
+     * @throws Exception the exception
+     */
     private ObservableList<String> getFirstLevelDivisionsFromDB(String countryID) throws Exception {
         String query = "SELECT * FROM first_level_divisions WHERE COUNTRY_ID = " + countryID;
         ResultSet firstLevelDivisions = DBConnection.query(query);
@@ -244,17 +312,33 @@ public class EditCustomerController {
         return firstLevelDivisionList;
     }
 
+    /**
+     * Back button clicked.
+     *
+     * @param event the button click event
+     */
     public void backButtonClicked(ActionEvent event) {
         System.out.println("Back button clicked");
         ScheduleHawkApplication.changeScene(event, "dashboard-view");
     }
 
+    /**
+     * On country select update sets the appropriate first level division items.
+     *
+     * @throws Exception the exception
+     */
     public void onCountrySelect() throws Exception {
         System.out.println("Selected: " + country.getValue());
         String countryID = getCountryIDByName(country.getValue());
         first_level_division.setItems(getFirstLevelDivisionsFromDB(countryID));
     }
 
+    /**
+     * Submit button clicked.
+     *
+     * @param event the button click event
+     * @throws Exception the exception
+     */
     public void submitButtonClicked(ActionEvent event) throws Exception {
         err_message_label.setText("");
         if (Objects.equals(customer_name.getText(), "")) {
@@ -294,6 +378,12 @@ public class EditCustomerController {
         }
     }
 
+    /**
+     * Create customer from form fields.
+     *
+     * @return the customer
+     * @throws Exception the exception
+     */
     private Customer createCustomer() throws Exception {
         Customer cust = new Customer();
 
@@ -312,6 +402,13 @@ public class EditCustomerController {
         return cust;
     }
 
+    /**
+     * Gets first level division id by the division.
+     *
+     * @param division the division
+     * @return the first level division id
+     * @throws Exception the exception
+     */
     private String getFirstLevelDivisionID(String division) throws Exception {
         String query = "SELECT * FROM first_level_divisions WHERE Division = \"" + division + "\"";
         ResultSet divisions = DBConnection.query(query);
@@ -322,29 +419,61 @@ public class EditCustomerController {
         }
     }
 
+    /**
+     * Gets local date from dateTime string.
+     *
+     * @param dateTime the dateTime
+     * @return the LocalDate
+     */
     private LocalDate getLocalDate(String dateTime) {
         String[] arrStr = dateTime.split(" ");
         return LocalDate.parse(arrStr[0]);
     }
 
+    /**
+     * Gets hour given dateTime string.
+     *
+     * @param dateTime the dateTime string
+     * @return the hour
+     */
     private String getHour(String dateTime) {
         String[] arrStr = dateTime.split(" ");
         arrStr = arrStr[1].split(":");
         return arrStr[0];
     }
 
+    /**
+     * Gets minutes given dateTime string.
+     *
+     * @param dateTime the dateTime string
+     * @return the minutes
+     */
     private String getMinutes(String dateTime) {
         String[] arrStr = dateTime.split(" ");
         arrStr = arrStr[1].split(":");
         return arrStr[1];
     }
 
+    /**
+     * Puts together dateTime string from form fields.
+     *
+     * @param datePicker the date picker
+     * @param start_hour the start hour combobox
+     * @param start_min  the start min combobox
+     * @return the date time string
+     */
     private String getDateTimeString(DatePicker datePicker, ComboBox<String> start_hour, ComboBox<String> start_min) {
         String date = datePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         String time = start_hour.getValue() + ":" + start_min.getValue() + ":00";
         return date + " " + time;
     }
 
+    /**
+     * Convert from UTC dateTime string to local dateTime string.
+     *
+     * @param dt the UTC dateTime
+     * @return the string
+     */
     private String convertFromUTC(String dt) {
         LocalDate localDate = LocalDate.parse(dt.split(" ")[0]);
         LocalTime localTime = LocalTime.parse(dt.split(" ")[1]);

@@ -514,7 +514,7 @@ public class EditAppointmentController {
     }
 
     /**
-     * Gets minutes given dateTime string..
+     * Gets minutes given dateTime string.
      *
      * @param dateTime the dateTime string
      * @return the minutes
