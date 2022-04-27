@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 
+import java.security.spec.RSAOtherPrimeInfo;
 import java.sql.ResultSet;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -150,6 +151,9 @@ public class EditAppointmentController {
         } else if (customerHasOverlappingAppt()) {
             System.out.println("Customer has an overlapping appointment");
             err_message_label.setText("Cannot overlap appointment times with an existing customer appointment");
+        } else if (!apptStartIsBeforeEnd()) {
+            System.out.println("Appointment starts after the end time");
+            err_message_label.setText("Cannot have a start time after the end time");
         } else {
             if (Objects.equals(userData, "new")) {
                 System.out.println("Creating new appointment");
@@ -244,6 +248,26 @@ public class EditAppointmentController {
             });
         }
         return overlappingApptExists.get();
+    }
+
+    private boolean apptStartIsBeforeEnd() throws ParseException {
+        Calendar startCal = Calendar.getInstance();
+        Calendar endCal = Calendar.getInstance();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+
+        Date startDate = formatter.parse(getDateTimeString(start_date, start_hour, start_min));
+        Date endDate = formatter.parse(getDateTimeString(end_date, end_hour, end_min));
+        startCal.setTime(startDate);
+        endCal.setTime(endDate);
+
+        System.out.println(startCal.compareTo(endCal));
+
+        if(startCal.compareTo(endCal) < 0){
+            System.out.println("here");
+            return true;
+        } else{
+            return false;
+        }
     }
 
     /**
