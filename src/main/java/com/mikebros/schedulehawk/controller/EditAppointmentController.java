@@ -250,6 +250,12 @@ public class EditAppointmentController {
         return overlappingApptExists.get();
     }
 
+    /**
+     * Check if appointment start datetime is before end datetime.
+     *
+     * @return the boolean, true if the start is before the end
+     * @throws ParseException the parse exception
+     */
     private boolean apptStartIsBeforeEnd() throws ParseException {
         Calendar startCal = Calendar.getInstance();
         Calendar endCal = Calendar.getInstance();
